@@ -1,19 +1,35 @@
-# Transaction Flow
+# Sale Transaction
 
 ```mermaid
 sequenceDiagram
 
-POS->>TransactionService: SALE 100
+participant POS
 
-TransactionService->>Redis: Load Config
+participant Gateway
 
-Redis-->>TransactionService: Config
+participant Auth
 
-TransactionService->>Acquirer: Authorize
+participant Config
 
-Acquirer-->>TransactionService: APPROVED
+participant Acquirer
 
-TransactionService->>PostgreSQL: Save Transaction
+participant DB
 
-TransactionService-->>POS: APPROVED
+POS->>Gateway: SALE 100
+
+Gateway->>Auth: Process Transaction
+
+Auth->>Config: Load Terminal
+
+Config-->>Auth: Terminal Config
+
+Auth->>Acquirer: Authorize
+
+Acquirer-->>Auth: APPROVED
+
+Auth->>DB: Save Transaction
+
+Auth-->>Gateway: APPROVED
+
+Gateway-->>POS: APPROVED
 ```
