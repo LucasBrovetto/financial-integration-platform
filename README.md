@@ -1,6 +1,6 @@
 # Financial Integration Platform
 
-Backend platform focused on financial integrations, transaction processing and enterprise connectivity.
+A backend platform focused on payment transaction processing, terminal management and financial integrations.
 
 ## Technologies
 
