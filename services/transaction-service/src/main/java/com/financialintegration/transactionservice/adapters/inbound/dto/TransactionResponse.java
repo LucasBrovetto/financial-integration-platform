@@ -1,8 +1,9 @@
 package com.financialintegration.transactionservice.adapters.inbound.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.financialintegration.transactionservice.domain.model.TransactionStatus;
 import com.financialintegration.transactionservice.domain.model.TransactionType;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

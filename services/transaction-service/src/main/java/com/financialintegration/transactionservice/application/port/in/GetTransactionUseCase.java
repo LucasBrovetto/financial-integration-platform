@@ -14,8 +14,7 @@ public interface GetTransactionUseCase {
      *
      * @param transactionId The transaction identifier
      * @return The transaction if found
-     * @throws TransactionNotFoundException
-     *         if the transaction is not found
+     * @throws TransactionNotFoundException if the transaction is not found
      */
     Transaction execute(String transactionId);
 }

@@ -1,5 +1,6 @@
 package com.financialintegration.transactionservice.adapters.inbound.exception;
 
+import com.financialintegration.transactionservice.application.exception.TransactionPersistenceException;
 import com.financialintegration.transactionservice.domain.exception.InvalidTransactionException;
 import com.financialintegration.transactionservice.domain.exception.TransactionNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -93,24 +94,25 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle IllegalArgumentException
+     * Handle TransactionPersistenceException
      */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(
-            IllegalArgumentException ex,
+    @ExceptionHandler(TransactionPersistenceException.class)
+    public ResponseEntity<ErrorResponse> handlePersistenceException(
+            TransactionPersistenceException ex,
             WebRequest request) {
 
-        log.warn("Illegal argument: {}", ex.getMessage());
+        log.error("Persistence error", ex);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("INVALID_ARGUMENT")
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error("PERSISTENCE_ERROR")
                 .message(ex.getMessage())
                 .path(request.getDescription(false).replace("uri=", ""))
                 .build();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+
     }
 
     /**

@@ -1,11 +1,13 @@
 package com.financialintegration.transactionservice.application.service;
 
+import com.financialintegration.transactionservice.application.exception.TransactionPersistenceException;
 import com.financialintegration.transactionservice.application.port.in.CreateTransactionCommand;
 import com.financialintegration.transactionservice.application.port.in.CreateTransactionUseCase;
 import com.financialintegration.transactionservice.application.port.out.TransactionPersistencePort;
 import com.financialintegration.transactionservice.domain.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,27 +35,25 @@ public class CreateTransactionService implements CreateTransactionUseCase {
         log.info("Creating transaction for terminal: {}, amount: {}, type: {}",
                 command.terminalId(), command.amount(), command.type());
 
-        try {
-            // Step 1: Create domain transaction (domain rules applied in factory method)
-            Transaction transaction = Transaction.create(
-                    command.terminalId(),
-                    command.amount(),
-                    command.type()
-            );
+        // Step 1: Create domain transaction (domain rules applied in factory method)
+        Transaction transaction = Transaction.create(
+                command.terminalId(),
+                command.amount(),
+                command.type()
+        );
 
-            // Step 2: Persist transaction
+        // Step 2: Persist transaction
+        try {
             Transaction savedTransaction = transactionPersistencePort.save(transaction);
             log.info("Transaction created successfully: {}", savedTransaction.getId());
 
             return savedTransaction;
 
-        } catch (IllegalArgumentException e) {
-            log.error("Invalid transaction request: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error creating transaction", e);
-            throw new RuntimeException("Failed to create transaction", e);
+        } catch (DataAccessException e) {
+            log.error("Error persisting transaction {}", transaction.getId(), e);
+            throw new TransactionPersistenceException("Failed to persist transaction", e);
         }
+
     }
 }
 

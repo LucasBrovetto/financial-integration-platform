@@ -1,5 +1,6 @@
 package com.financialintegration.transactionservice.domain.model;
 
+import com.financialintegration.transactionservice.domain.exception.InvalidTransactionException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -64,13 +65,13 @@ public class Transaction {
      */
     private static void validateCreation(String terminalId, BigDecimal amount, TransactionType type) {
         if (terminalId == null || terminalId.isBlank()) {
-            throw new IllegalArgumentException("Terminal ID cannot be null or empty");
+            throw new InvalidTransactionException("Terminal ID cannot be null or empty");
         }
         if (amount == null || amount.signum() <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
+            throw new InvalidTransactionException("Amount must be positive");
         }
         if (type == null) {
-            throw new IllegalArgumentException("Transaction type cannot be null");
+            throw new InvalidTransactionException("Transaction type cannot be null");
         }
     }
 
@@ -79,7 +80,7 @@ public class Transaction {
      */
     public void approve() {
         if (this.status != TransactionStatus.PENDING) {
-            throw new IllegalStateException("Only PENDING transactions can be approved");
+            throw new InvalidTransactionException("Only PENDING transactions can be approved");
         }
         this.status = TransactionStatus.APPROVED;
         this.updatedAt = LocalDateTime.now();
@@ -90,7 +91,7 @@ public class Transaction {
      */
     public void decline(String reason) {
         if (this.status != TransactionStatus.PENDING) {
-            throw new IllegalStateException("Only PENDING transactions can be declined");
+            throw new InvalidTransactionException("Only PENDING transactions can be declined");
         }
         this.status = TransactionStatus.DECLINED;
         this.failureReason = reason;

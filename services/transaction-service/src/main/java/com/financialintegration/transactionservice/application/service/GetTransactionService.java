@@ -29,19 +29,11 @@ public class GetTransactionService implements GetTransactionUseCase {
     public Transaction execute(String transactionId) {
         log.info("Retrieving transaction: {}", transactionId);
 
-        try {
-            return transactionPersistencePort.findByIdString(transactionId)
-                    .orElseThrow(() -> {
-                        log.warn("Transaction not found: {}", transactionId);
-                        return new TransactionNotFoundException(transactionId);
-                    });
-
-        } catch (TransactionNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error retrieving transaction: {}", transactionId, e);
-            throw new RuntimeException("Failed to retrieve transaction", e);
-        }
+        return transactionPersistencePort.findByIdString(transactionId)
+                .orElseThrow(() -> {
+                    log.warn("Transaction not found: {}", transactionId);
+                    return new TransactionNotFoundException(transactionId);
+                });
     }
 }
 
