@@ -1,6 +1,7 @@
 package com.financialintegration.transactionservice.adapters.outbound.persistence;
 
 import com.financialintegration.transactionservice.application.port.out.TransactionPersistencePort;
+import com.financialintegration.transactionservice.domain.exception.TransactionNotFoundException;
 import com.financialintegration.transactionservice.domain.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +78,7 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
         log.debug("Updating transaction: {}", transaction.getId());
 
         if (!existsById(transaction.getId())) {
-            throw new IllegalArgumentException("Transaction not found: " + transaction.getId());
+            throw new TransactionNotFoundException(transaction.getId().toString());
         }
 
         TransactionEntity entity = toEntity(transaction);

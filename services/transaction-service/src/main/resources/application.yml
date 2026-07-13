@@ -6,8 +6,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-      show-sql: true
-      application:
+    show-sql: true
+  application:
         name: transaction-service
 server:
     port: 8080
