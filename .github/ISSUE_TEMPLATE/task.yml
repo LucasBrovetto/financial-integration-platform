@@ -1,0 +1,46 @@
+name: Delivery task
+description: Create a scoped implementation task for the Financial Integration Platform.
+title: "[Area] "
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: Describe the user or technical outcome in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: List observable conditions that prove the work is complete.
+      placeholder: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: dropdown
+    id: sprint
+    attributes:
+      label: Sprint
+      options:
+        - Sprint 1 - Foundations and POS MVC
+        - Sprint 2 - Acquirer integration
+        - Sprint 3 - Event-driven integrations
+        - Sprint 4 - Quality and delivery
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - POS terminal
+        - Transaction processor
+        - Acquirer simulator
+        - Integration service
+        - Quality
+        - DevOps
+        - Documentation
+    validations:
+      required: true
