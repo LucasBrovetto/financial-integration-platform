@@ -30,14 +30,6 @@ public interface TransactionPersistencePort {
     Optional<Transaction> findById(UUID id);
 
     /**
-     * Find a transaction by its string ID representation
-     *
-     * @param id The transaction identifier as string
-     * @return Optional containing the transaction if found
-     */
-    Optional<Transaction> findByIdString(String id);
-
-    /**
      * Check if a transaction exists by ID
      *
      * @param id The transaction identifier

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * Application Service: Get Transaction Use Case Implementation
  * Orchestrates retrieval of a transaction by ID.
@@ -26,10 +28,10 @@ public class GetTransactionService implements GetTransactionUseCase {
      * 2. Return transaction or throw exception if not found
      */
     @Override
-    public Transaction execute(String transactionId) {
+    public Transaction execute(UUID transactionId) {
         log.info("Retrieving transaction: {}", transactionId);
 
-        return transactionPersistencePort.findByIdString(transactionId)
+        return transactionPersistencePort.findById(transactionId)
                 .orElseThrow(() -> {
                     log.warn("Transaction not found: {}", transactionId);
                     return new TransactionNotFoundException(transactionId);

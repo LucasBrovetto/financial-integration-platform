@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 /**
  * Transaction REST Controller
  * Inbound Adapter: Exposes transaction operations via HTTP REST API
@@ -60,7 +62,7 @@ public class TransactionController {
      * @return ResponseEntity with transaction and 200 status
      */
     @GetMapping("/{transactionId}")
-    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable String transactionId) {
+    public ResponseEntity<TransactionResponse> getTransaction(@PathVariable UUID transactionId) {
 
         log.info("GET /transactions/{} - Retrieving transaction", transactionId);
 

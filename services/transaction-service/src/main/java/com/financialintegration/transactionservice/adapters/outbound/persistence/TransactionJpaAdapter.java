@@ -49,20 +49,6 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
     }
 
     /**
-     * Find transaction by String ID
-     */
-    @Override
-    public Optional<Transaction> findByIdString(String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            return findById(uuid);
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid UUID format: {}", id);
-            return Optional.empty();
-        }
-    }
-
-    /**
      * Check if transaction exists
      */
     @Override
@@ -78,7 +64,7 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
         log.debug("Updating transaction: {}", transaction.getId());
 
         if (!existsById(transaction.getId())) {
-            throw new TransactionNotFoundException(transaction.getId().toString());
+            throw new TransactionNotFoundException(transaction.getId());
         }
 
         TransactionEntity entity = toEntity(transaction);

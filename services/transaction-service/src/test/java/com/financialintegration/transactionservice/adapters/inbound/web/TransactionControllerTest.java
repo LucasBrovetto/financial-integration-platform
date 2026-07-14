@@ -63,16 +63,16 @@ class TransactionControllerTest {
                 request.terminalId(), request.amount(), request.type()
         );
 
-        var id = UUID.randomUUID();
+        var transactionId = UUID.randomUUID();
         var now = LocalDateTime.now();
 
         var created = Transaction.restore(
-                id, request.terminalId(), request.amount(), request.type(),
+                transactionId, request.terminalId(), request.amount(), request.type(),
                 TransactionStatus.PENDING, now, now, null
         );
 
         var response = new TransactionResponse(
-                id.toString(), request.terminalId(), request.amount(), request.type(),
+                transactionId, request.terminalId(), request.amount(), request.type(),
                 TransactionStatus.PENDING, now, now, null
         );
 
@@ -84,7 +84,7 @@ class TransactionControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(id.toString()))
+                .andExpect(jsonPath("$.id").value(transactionId.toString()))
                 .andExpect(jsonPath("$.terminalId").value("terminal-123"))
                 .andExpect(jsonPath("$.amount").value(100))
                 .andExpect(jsonPath("$.type").value("SALE"))
@@ -149,37 +149,37 @@ class TransactionControllerTest {
     @Test
     @DisplayName("GET /transactions/{id} - success returns 200 and payload")
     void getTransaction_success() throws Exception {
-        String id = UUID.randomUUID().toString();
+        var transactionId = UUID.randomUUID();
 
         var found = Transaction.restore(
-                UUID.fromString(id), "term-1", BigDecimal.valueOf(55), TransactionType.SALE,
+                transactionId, "term-1", BigDecimal.valueOf(55), TransactionType.SALE,
                 TransactionStatus.PENDING, LocalDateTime.now(), LocalDateTime.now(), null
         );
 
         var response = new TransactionResponse(
-                id, "term-1", BigDecimal.valueOf(55), TransactionType.SALE, TransactionStatus.PENDING,
+                transactionId, "term-1", BigDecimal.valueOf(55), TransactionType.SALE, TransactionStatus.PENDING,
                 LocalDateTime.now(), LocalDateTime.now(), null
         );
 
-        when(getTransactionUseCase.execute(id)).thenReturn(found);
+        when(getTransactionUseCase.execute(transactionId)).thenReturn(found);
         when(transactionMapper.toResponse(found)).thenReturn(response);
 
-        mockMvc.perform(get("/transactions/{transactionId}", id))
+        mockMvc.perform(get("/transactions/{transactionId}", transactionId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.id").value(transactionId.toString()))
                 .andExpect(jsonPath("$.terminalId").value("term-1"))
                 .andExpect(jsonPath("$.amount").value(55))
                 .andExpect(jsonPath("$.type").value("SALE"))
                 .andExpect(jsonPath("$.status").value("PENDING"));;
 
-        verify(getTransactionUseCase).execute(id);
+        verify(getTransactionUseCase).execute(transactionId);
         verify(transactionMapper).toResponse(found);
     }
 
     @Test
     @DisplayName("GET /transactions/{id} - not found returns 404 error")
     void getTransaction_notFound() throws Exception {
-        var id = UUID.randomUUID().toString();
+        var id = UUID.randomUUID();
 
         when(getTransactionUseCase.execute(id)).thenThrow(new TransactionNotFoundException(id));
 
@@ -189,6 +189,19 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.message").exists());
 
         verify(getTransactionUseCase).execute(id);
+        verifyNoInteractions(transactionMapper);
+    }
+
+    @Test
+    @DisplayName("GET /transactions/{id} - invalid UUID returns 400")
+    void getTransaction_invalidUuid() throws Exception {
+        mockMvc.perform(get("/transactions/{transactionId}", "WRONG_UUID"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("INVALID_PATH_PARAMETER"))
+                .andExpect(jsonPath("$.message")
+                        .value("Transaction ID must be a valid UUID"));
+
+        verifyNoInteractions(getTransactionUseCase);
         verifyNoInteractions(transactionMapper);
     }
 

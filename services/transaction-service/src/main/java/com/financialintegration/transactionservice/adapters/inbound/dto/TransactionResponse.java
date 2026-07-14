@@ -6,6 +6,7 @@ import com.financialintegration.transactionservice.domain.model.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Transaction Response DTO
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TransactionResponse(
-        String id,
+        UUID id,
         String terminalId,
         BigDecimal amount,
         TransactionType type,

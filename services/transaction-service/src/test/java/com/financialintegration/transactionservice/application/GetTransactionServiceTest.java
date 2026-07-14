@@ -32,30 +32,30 @@ public class GetTransactionServiceTest {
     @Test
     @DisplayName("Get transaction - success returns transaction")
     void getTransaction_success() {
-        var transactionId = UUID.randomUUID().toString();
+        var transactionId = UUID.randomUUID();
         var transaction = Transaction.create(
                 "TERM-001",
                 new BigDecimal("150.50"),
                 TransactionType.SALE
         );
 
-        when(transactionPersistencePort.findByIdString(transactionId))
+        when(transactionPersistencePort.findById(transactionId))
                 .thenReturn(Optional.of(transaction));
 
         var result = getTransactionService.execute(transactionId);
 
         assertNotNull(result);
         assertSame(transaction, result);
-        verify(transactionPersistencePort).findByIdString(transactionId);
+        verify(transactionPersistencePort).findById(transactionId);
 
     }
 
     @Test
     @DisplayName("Get transaction - transaction not found throws exception")
     void getTransaction_NotFound() {
-        var transactionId = UUID.randomUUID().toString();
+        var transactionId = UUID.randomUUID();
 
-        when(transactionPersistencePort.findByIdString(transactionId))
+        when(transactionPersistencePort.findById(transactionId))
                 .thenReturn(Optional.empty());
 
         var exception = assertThrows(TransactionNotFoundException.class,
@@ -63,7 +63,7 @@ public class GetTransactionServiceTest {
         );
 
         assertEquals("Transaction not found: " + transactionId, exception.getMessage());
-        verify(transactionPersistencePort).findByIdString(transactionId);
+        verify(transactionPersistencePort).findById(transactionId);
 
     }
 }
