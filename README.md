@@ -48,6 +48,10 @@ The default credentials are for local development only. Production credentials m
 
 Database changes are versioned in `services/transaction-service/src/main/resources/db/migration` and applied by Flyway.
 
+## API Documentation
+
+When the transaction service is running locally, Swagger UI is available at `http://localhost:8080/swagger-ui/index.html`. The generated OpenAPI specification is available at `http://localhost:8080/v3/api-docs`. Both endpoints are disabled in the `prod` profile.
+
 ## Quality Checks
 
 Run unit and web-layer tests without Docker:

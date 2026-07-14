@@ -6,6 +6,12 @@ import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.
 import io.github.lucasbrovetto.financialintegration.transactionservice.application.port.in.CreateTransactionUseCase;
 import io.github.lucasbrovetto.financialintegration.transactionservice.application.port.in.GetTransactionUseCase;
 import io.github.lucasbrovetto.financialintegration.transactionservice.domain.model.Transaction;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +31,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/transactions")
 @RequiredArgsConstructor
+@Tag(name = "Transactions", description = "Payment transaction lifecycle operations")
 public class TransactionController {
 
     private final CreateTransactionUseCase createTransactionUseCase;
@@ -39,6 +46,12 @@ public class TransactionController {
      * @return ResponseEntity with created transaction and 201 status
      */
     @PostMapping
+    @Operation(summary = "Create a transaction", description = "Creates a new transaction with PENDING status.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Transaction created",
+                    content = @Content(schema = @Schema(implementation = TransactionResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid transaction request")
+    })
     public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody CreateTransactionRequest request) {
 
         log.info("POST /transactions - Creating transaction for terminal: {}", request.terminalId());
@@ -62,6 +75,13 @@ public class TransactionController {
      * @return ResponseEntity with transaction and 200 status
      */
     @GetMapping("/{transactionId}")
+    @Operation(summary = "Get a transaction", description = "Retrieves a transaction by its identifier.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Transaction found",
+                    content = @Content(schema = @Schema(implementation = TransactionResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid transaction identifier"),
+            @ApiResponse(responseCode = "404", description = "Transaction not found")
+    })
     public ResponseEntity<TransactionResponse> getTransaction(@PathVariable UUID transactionId) {
 
         log.info("GET /transactions/{} - Retrieving transaction", transactionId);
@@ -74,4 +94,3 @@ public class TransactionController {
 
     }
 }
-
