@@ -25,12 +25,12 @@ The detailed backlog and demo outcomes are available in the [delivery roadmap](d
 
 ```mermaid
 flowchart LR
-    POS[POS Terminal MVC] --> Processor[Transaction Processor]
-    Processor --> Visa[Visa Simulator]
-    Processor --> Mastercard[Mastercard Simulator]
+    POS[POS Terminal MVC - Sprint 1] --> Processor[Transaction Processor]
+    Processor --> Visa[Visa Simulator - Sprint 2]
+    Processor --> Mastercard[Mastercard Simulator - Sprint 2]
     Processor --> Database[(PostgreSQL)]
-    Processor --> Kafka[Kafka]
-    Swift[SWIFT MT103 files] --> Camel[Apache Camel] --> Processor
+    Processor -. Sprint 3 .-> Kafka[Kafka Events]
+    Swift[SWIFT MT103 files - Sprint 3] -.-> Camel[Apache Camel] -.-> Processor
 ```
 
 ## Local Development

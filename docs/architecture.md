@@ -1,85 +1,48 @@
-# Microservices Architecture
+# Platform Architecture
 
-## Overall System Design
+## Portfolio Scope
+
+The platform simulates one clear financial journey: a POS terminal submits a payment, the transaction processor applies business rules, an acquirer returns an authorization decision, and the processor records the outcome.
+
+The repository is delivered incrementally. Components shown as planned are not presented as current implementation.
+
+## Target MVP
 
 ```mermaid
-graph TB
-    subgraph "External Systems"
-        POS["🖥️ POS Simulator"]
-        ACQ["🏦 Acquirer Simulator"]
-    end
+flowchart LR
+    POS["POS Terminal\nSprint 1"] --> Processor["Transaction Processor\nHexagonal Architecture"]
+    Processor --> Acquirer["Visa / Mastercard Simulator\nSprint 2"]
+    Processor --> Database[(PostgreSQL)]
 
-    subgraph "API Gateway & Configuration"
-        GW["🚪 Spring Cloud Gateway"]
-        CONFIG["⚙️ Config Server<br/>Spring Cloud Config"]
-    end
-
-    subgraph "Core Microservices"
-        TS["📊 Transaction Service<br/>(Hexagonal Architecture)"]
-        AUTH["🔐 Authorization Service"]
-        CFG["🖥️ Terminal Configuration Service"]
-    end
-
-    subgraph "Data & Messaging Layer"
-        DB[("🗄️ PostgreSQL")]
-        REDIS[("⚡ Redis Cache")]
-        KAFKA["📨 Apache Kafka<br/>Event Streaming"]
-    end
-
-    POS -->|HTTP| GW
-    GW -->|Routes| TS
-    GW -->|Routes| AUTH
-    GW -->|Routes| CFG
-    
-    TS -->|Validate| AUTH
-    TS -->|Fetch Config| CFG
-    TS -->|Query| REDIS
-    TS -->|Publish Events| KAFKA
-    TS -->|Persist| DB
-    
-    AUTH -->|Authorize| ACQ
-    AUTH -->|Persist| DB
-    
-    CFG -->|Cache| REDIS
-    CFG -->|Persist| DB
-    
-    CONFIG -->|Provides Config| TS
-    CONFIG -->|Provides Config| AUTH
-    CONFIG -->|Provides Config| CFG
-    
-    KAFKA -->|Subscribe Events| TS
-    KAFKA -->|Subscribe Events| AUTH
-    
-    style TS fill:#4A90E2,stroke:#2E5C8A,color:#fff
-    style GW fill:#F5A623,stroke:#C17E1B,color:#fff
-    style CONFIG fill:#F5A623,stroke:#C17E1B,color:#fff
-    style KAFKA fill:#50E3C2,stroke:#2BA39A,color:#000
+    Processor -. "Sprint 3" .-> Events["Kafka Events"]
+    Swift["SWIFT MT103 File\nSprint 3"] -.-> Camel["Apache Camel"] -.-> Processor
 ```
 
----
+## Component Responsibilities
+
+| Component | Responsibility | Delivery |
+|---|---|---|
+| POS Terminal | Spring MVC UI that submits a sale and shows its result | Sprint 1 |
+| Transaction Processor | Domain rules, use cases, persistence ports, and HTTP API | Current foundation / Sprint 1 |
+| PostgreSQL | Stores transactions and processing status | Current foundation |
+| Acquirer Simulator | Deterministic Visa and Mastercard authorization responses | Sprint 2 |
+| Kafka | Publishes transaction lifecycle events through an outbox flow | Sprint 3 |
+| Apache Camel | Imports sample SWIFT MT103 files into application commands | Sprint 3 |
+| RabbitMQ | Schedules delayed retries for unavailable acquirers | Sprint 3 |
 
 ## Design Principles
 
-| Principle | Description |
-|-----------|-------------|
-| **Hexagonal Architecture** | Each microservice isolates domain logic from external dependencies |
-| **Spring Cloud Native** | Leverages Spring Cloud Gateway, Config Server, Circuit Breakers |
-| **Event-Driven** | Kafka enables asynchronous, decoupled communication |
-| **Database per Service** | Each service owns its PostgreSQL schema (logical isolation) |
-| **Caching Strategy** | Redis for terminal configs and frequently accessed data |
-| **Resilience** | Retry logic, circuit breakers, fallbacks for external calls |
+| Principle | Application in this project |
+|---|---|
+| Hexagonal architecture | Domain and use cases depend on ports, never on HTTP, JPA, or messaging frameworks. |
+| Incremental delivery | A diagram only treats a component as implemented once it has executable code and tests. |
+| Financial traceability | Transactions use stable identifiers and record an explicit lifecycle status. |
+| Resilience by use case | Timeouts and retries are introduced with the acquirer integration, not as speculative infrastructure. |
+| Testability | Domain and application rules are verified independently from adapters. |
 
----
+## Technology Evidence
 
-## Technology Stack
-
-- **Runtime**: Java 21 + Spring Boot 3.x
-- **API Gateway**: Spring Cloud Gateway
-- **Configuration**: Spring Cloud Config
-- **Messaging**: Apache Kafka
-- **Persistence**: PostgreSQL + Hibernate/JPA
-- **Caching**: Redis
-- **Build**: Maven 3.9+
-- **Container**: Docker + Docker Compose
-- **Orchestration**: Kubernetes (future)
-
+- **Current foundation:** Java 21, Spring Boot, Spring MVC REST, PostgreSQL/JPA, Maven, Lombok, MapStruct, JUnit 5, Mockito, Testcontainers, and Docker Compose.
+- **Sprint 2:** acquirer adapters, simplified ISO 8583 messages, retry, and circuit breaker behavior.
+- **Sprint 3:** Kafka, RabbitMQ, Apache Camel, SWIFT import, and Java concurrency.
+- **Sprint 4:** GitHub Actions, Jenkins, SonarQube, broader integration tests, and delivery documentation.
