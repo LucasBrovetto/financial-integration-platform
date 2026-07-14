@@ -5,6 +5,7 @@ import com.financialintegration.transactionservice.application.service.GetTransa
 import com.financialintegration.transactionservice.domain.exception.TransactionNotFoundException;
 import com.financialintegration.transactionservice.domain.model.Transaction;
 import com.financialintegration.transactionservice.domain.model.TransactionType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,8 @@ public class GetTransactionServiceTest {
     private GetTransactionService getTransactionService;
 
     @Test
-    void shouldReturnTransactionWhenTransactionExists() {
+    @DisplayName("Get transaction - success returns transaction")
+    void getTransaction_success() {
         var transactionId = UUID.randomUUID().toString();
         var transaction = Transaction.create(
                 "TERM-001",
@@ -49,7 +51,8 @@ public class GetTransactionServiceTest {
     }
 
     @Test
-    void shouldThrowTransactionNotFoundExceptionWhenTransactionDoesNotExist() {
+    @DisplayName("Get transaction - transaction not found throws exception")
+    void getTransaction_NotFound() {
         var transactionId = UUID.randomUUID().toString();
 
         when(transactionPersistencePort.findByIdString(transactionId))

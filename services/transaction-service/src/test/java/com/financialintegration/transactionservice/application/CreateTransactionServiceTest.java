@@ -6,6 +6,7 @@ import com.financialintegration.transactionservice.application.port.out.Transact
 import com.financialintegration.transactionservice.application.service.CreateTransactionService;
 import com.financialintegration.transactionservice.domain.model.Transaction;
 import com.financialintegration.transactionservice.domain.model.TransactionType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +31,8 @@ public class CreateTransactionServiceTest {
     private CreateTransactionService createTransactionService;
 
     @Test
-    void shouldCreateTransactionSuccessfully() {
+    @DisplayName("Create transaction - success persists transaction")
+    void createTransaction_success() {
         var command = new CreateTransactionCommand(
                 "TERM-001",
                 new BigDecimal("150.50"),
@@ -51,7 +53,8 @@ public class CreateTransactionServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenPersistenceFails() {
+    @DisplayName("Create transaction - persistence failure throws exception")
+    void createTransaction_persistenceFailure() {
         var command = new CreateTransactionCommand(
                 "TERM-001",
                 new BigDecimal("150.50"),

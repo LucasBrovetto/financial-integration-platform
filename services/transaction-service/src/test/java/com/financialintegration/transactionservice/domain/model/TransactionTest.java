@@ -1,18 +1,18 @@
 package com.financialintegration.transactionservice.domain.model;
 
 import com.financialintegration.transactionservice.domain.exception.InvalidTransactionException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.apache.logging.log4j.util.Strings.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TransactionTest {
 
     @Test
-    void shouldCreateTransactionSuccessfully() {
-
+    @DisplayName("Create transaction - success creates a valid transaction")
+    void createTransaction_success() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("150.50");
         var type = TransactionType.SALE;
@@ -32,12 +32,13 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenTerminalIdIsBlank() {
+    @DisplayName("Create transaction - blank terminal id throws exception")
+    void createTransaction_blankTerminalId()  {
         var amount = new BigDecimal("100.00");
 
         var exception = assertThrows(InvalidTransactionException.class,
                 () -> Transaction.create(
-                        EMPTY,
+                        "",
                         amount,
                         TransactionType.SALE
                 ));
@@ -47,7 +48,8 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenAmountIsNegative() {
+    @DisplayName("Create transaction - negative amount throws exception")
+    void createTransaction_negativeAmount() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("-100.00");
 
@@ -62,7 +64,8 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenTransactionTypeIsNull() {
+    @DisplayName("Create transaction - null transaction type throws exception")
+    void createTransaction_nullTransactionType() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("100.00");
 
@@ -77,7 +80,8 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldApprovePendingTransaction() {
+    @DisplayName("Approve transaction - success changes status to APPROVED")
+    void approveTransaction_success() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("150.50");
         var type = TransactionType.SALE;
@@ -90,7 +94,8 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenApprovingNonPendingTransaction() {
+    @DisplayName("Approve transaction - non pending transaction throws exception")
+    void approveTransaction_nonPending() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("150.50");
         var type = TransactionType.SALE;
@@ -106,7 +111,8 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldDeclinePendingTransaction() {
+    @DisplayName("Decline transaction - success changes status to DECLINED")
+    void declineTransaction_success() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("150.50");
         var type = TransactionType.SALE;
@@ -122,7 +128,8 @@ public class TransactionTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenDecliningNonPendingTransaction() {
+    @DisplayName("Decline transaction - non pending transaction throws exception")
+    void declineTransaction_nonPending() {
         var terminalId = "TERM-001";
         var amount = new BigDecimal("150.50");
         var type = TransactionType.SALE;
