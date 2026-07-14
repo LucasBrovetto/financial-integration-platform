@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Testcontainers
 @Transactional
-public class TransactionJpaAdapterTest {
+class TransactionJpaAdapterIT {
 
 
     @Container

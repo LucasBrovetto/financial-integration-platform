@@ -40,3 +40,20 @@ flowchart LR
 3. Run the transaction service from `services/transaction-service` with `./mvnw spring-boot:run`.
 
 The default credentials are for local development only. Production credentials must be supplied through environment variables or a secret manager.
+
+## Quality Checks
+
+Run unit and web-layer tests without Docker:
+
+```bash
+cd services/transaction-service
+./mvnw test
+```
+
+Run PostgreSQL integration tests when Docker is available:
+
+```bash
+./mvnw verify -Pintegration
+```
+
+The JaCoCo HTML report is generated at `services/transaction-service/target/site/jacoco/index.html` after `verify`.
