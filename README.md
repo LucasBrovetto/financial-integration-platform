@@ -67,4 +67,6 @@ Run PostgreSQL integration tests when Docker is available:
 ./mvnw verify -Pintegration
 ```
 
+The integration profile verifies persistence adapters and the HTTP transaction flow against PostgreSQL Testcontainers using JSON fixtures.
+
 The JaCoCo HTML report is generated at `services/transaction-service/target/site/jacoco/index.html` after `verify`.
