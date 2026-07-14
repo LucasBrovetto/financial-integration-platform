@@ -41,6 +41,14 @@ flowchart LR
 
 The default credentials are for local development only. Production credentials must be supplied through environment variables or a secret manager.
 
+## Configuration Profiles
+
+- `local` is the default profile and connects to the PostgreSQL instance started by Docker Compose.
+- `test` is used by Testcontainers and validates the schema created by Flyway migrations.
+- `prod` requires database credentials through `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` and validates, rather than changes, the schema.
+
+Database changes are versioned in `services/transaction-service/src/main/resources/db/migration` and applied by Flyway.
+
 ## Quality Checks
 
 Run unit and web-layer tests without Docker:

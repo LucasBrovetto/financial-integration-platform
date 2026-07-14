@@ -1,14 +1,12 @@
 spring:
   application:
     name: transaction-service
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/financial_platform}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+  profiles:
+    default: local
   jpa:
-    hibernate:
-      ddl-auto: ${JPA_DDL_AUTO:update}
-    show-sql: ${JPA_SHOW_SQL:false}
+    open-in-view: false
+  flyway:
+    locations: classpath:db/migration
 server:
   port: ${SERVER_PORT:8080}
 
