@@ -40,3 +40,8 @@ target/
 # Logs
 
 *.log
+
+# Local environment configuration
+.env
+.env.*
+!.env.example
