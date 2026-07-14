@@ -28,7 +28,7 @@ Environment values are kept in `.env` for local development and are exposed to t
 | Sprint | Runtime addition | Reason |
 |---|---|---|
 | Sprint 1 | POS Terminal and service containers | Demonstrate the core payment flow locally. |
-| Sprint 2 | Visa and Mastercard simulators | Demonstrate provider integration and ISO 8583 mapping. |
+| Sprint 2 | Acquirer simulator over TCP/IP | Demonstrate authorization integration and ISO 8583 mapping. |
 | Sprint 3 | Kafka, RabbitMQ, and Camel import worker | Demonstrate asynchronous events, retries, and SWIFT import. |
 | Sprint 4 | CI pipelines and SonarQube | Demonstrate repeatable quality and delivery controls. |
 

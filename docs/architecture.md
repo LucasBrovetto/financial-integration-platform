@@ -11,7 +11,7 @@ The repository is delivered incrementally. Components shown as planned are not p
 ```mermaid
 flowchart LR
     POS["POS Terminal\nSprint 1"] --> Processor["Transaction Processor\nHexagonal Architecture"]
-    Processor --> Acquirer["Visa / Mastercard Simulator\nSprint 2"]
+    Processor --> Acquirer["Acquirer Simulator\nTCP/IP + ISO 8583\nSprint 2"]
     Processor --> Database[(PostgreSQL)]
 
     Processor -. "Sprint 3" .-> Events["Kafka Events"]
@@ -25,7 +25,7 @@ flowchart LR
 | POS Terminal | Spring MVC UI that submits a sale and shows its result | Sprint 1 |
 | Transaction Processor | Domain rules, use cases, persistence ports, and HTTP API | Current foundation / Sprint 1 |
 | PostgreSQL | Stores transactions and processing status | Current foundation |
-| Acquirer Simulator | Deterministic Visa and Mastercard authorization responses | Sprint 2 |
+| Acquirer Simulator | Deterministic authorization responses over TCP/IP using simplified ISO 8583 messages | Sprint 2 |
 | Kafka | Publishes transaction lifecycle events through an outbox flow | Sprint 3 |
 | Apache Camel | Imports sample SWIFT MT103 files into application commands | Sprint 3 |
 | RabbitMQ | Schedules delayed retries for unavailable acquirers | Sprint 3 |

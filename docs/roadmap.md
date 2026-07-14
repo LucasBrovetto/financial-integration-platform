@@ -8,7 +8,7 @@ The platform will simulate a point-of-sale transaction flow:
 
 1. A Spring MVC POS terminal submits a payment request.
 2. The transaction processor applies domain rules through hexagonal architecture.
-3. A Visa or Mastercard simulator authorizes, declines, or times out.
+3. An acquirer simulator authorizes, declines, or times out through TCP/IP using simplified ISO 8583 messages.
 4. The processor stores the result and publishes an event.
 5. Apache Camel imports sample SWIFT files into the same processing flow.
 
@@ -28,12 +28,12 @@ The platform will simulate a point-of-sale transaction flow:
 
 ## Sprint 2 - Acquirer Integration
 
-**Goal:** authorize a transaction through deterministic Visa and Mastercard simulators.
+**Goal:** authorize a transaction through a deterministic acquirer simulator over TCP/IP.
 
 - [ ] Define authorization ports and provider-neutral request and response models.
-- [ ] Create a Visa acquirer adapter and simulator.
-- [ ] Create a Mastercard acquirer adapter and simulator.
-- [ ] Route authorizations by card metadata or test BIN ranges.
+- [ ] Create a TCP/IP acquirer simulator with deterministic authorization scenarios.
+- [ ] Create a TCP/IP acquirer adapter behind the authorization port.
+- [ ] Route authorizations by card metadata or explicit test scenarios.
 - [ ] Model a simplified ISO 8583 request and response including STAN, RRN, and response code.
 - [ ] Add timeout, retry, circuit-breaker, and idempotency handling.
 - [ ] Cover authorization rules and adapters with JUnit 5 and Mockito tests.

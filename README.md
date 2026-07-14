@@ -15,7 +15,7 @@ A portfolio project that simulates payment processing from a point-of-sale termi
 The platform will evolve through four weekly sprints:
 
 1. POS terminal MVC and transaction processing foundations
-2. Visa and Mastercard acquirer simulation with simplified ISO 8583 messages
+2. Acquirer simulator using TCP/IP and simplified ISO 8583 messages
 3. Kafka, RabbitMQ, Apache Camel, and SWIFT MT103 import flows
 4. CI/CD, Sonar quality gates, integration testing, and portfolio documentation
 
@@ -26,8 +26,7 @@ The detailed backlog and demo outcomes are available in the [delivery roadmap](d
 ```mermaid
 flowchart LR
     POS[POS Terminal MVC - Sprint 1] --> Processor[Transaction Processor]
-    Processor --> Visa[Visa Simulator - Sprint 2]
-    Processor --> Mastercard[Mastercard Simulator - Sprint 2]
+    Processor --> Acquirer[Acquirer Simulator - Sprint 2\nTCP/IP + ISO 8583]
     Processor --> Database[(PostgreSQL)]
     Processor -. Sprint 3 .-> Kafka[Kafka Events]
     Swift[SWIFT MT103 files - Sprint 3] -.-> Camel[Apache Camel] -.-> Processor
