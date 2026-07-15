@@ -1,5 +1,6 @@
 package io.github.lucasbrovetto.financialintegration.transactionservice.adapters.outbound.persistence;
 
+import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.outbound.persistence.mapper.TransactionPersistenceMapper;
 import io.github.lucasbrovetto.financialintegration.transactionservice.application.port.out.TransactionPersistencePort;
 import io.github.lucasbrovetto.financialintegration.transactionservice.domain.exception.TransactionNotFoundException;
 import io.github.lucasbrovetto.financialintegration.transactionservice.domain.model.Transaction;
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class TransactionJpaAdapter implements TransactionPersistencePort {
 
     private final TransactionJpaRepository jpaRepository;
+    private final TransactionPersistenceMapper transactionPersistenceMapper;
 
     /**
      * Save a transaction to the database
@@ -33,11 +35,11 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
     public Transaction save(Transaction transaction) {
         log.debug("Persisting transaction: {}", transaction.getId());
 
-        TransactionEntity entity = toEntity(transaction);
+        TransactionEntity entity = transactionPersistenceMapper.toEntity(transaction);
         TransactionEntity savedEntity = jpaRepository.save(entity);
 
         log.debug("Transaction persisted successfully: {}", savedEntity.getId());
-        return toDomain(savedEntity);
+        return transactionPersistenceMapper.toDomain(savedEntity);
     }
 
     /**
@@ -45,7 +47,7 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
      */
     @Override
     public Optional<Transaction> findById(UUID id) {
-        return jpaRepository.findById(id).map(this::toDomain);
+        return jpaRepository.findById(id).map(transactionPersistenceMapper::toDomain);
     }
 
     /**
@@ -67,11 +69,11 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
             throw new TransactionNotFoundException(transaction.getId());
         }
 
-        TransactionEntity entity = toEntity(transaction);
+        TransactionEntity entity = transactionPersistenceMapper.toEntity(transaction);
         TransactionEntity updatedEntity = jpaRepository.save(entity);
 
         log.debug("Transaction updated successfully: {}", updatedEntity.getId());
-        return toDomain(updatedEntity);
+        return transactionPersistenceMapper.toDomain(updatedEntity);
     }
 
     /**
@@ -84,38 +86,4 @@ public class TransactionJpaAdapter implements TransactionPersistencePort {
         log.debug("Transaction deleted: {}", id);
     }
 
-    // ========== Conversion Methods (Domain ↔ JPA) ==========
-
-    /**
-     * Convert JPA Entity to Domain Model
-     */
-    private Transaction toDomain(TransactionEntity entity) {
-        return Transaction.restore(
-                entity.getId(),
-                entity.getTerminalId(),
-                entity.getAmount(),
-                entity.getType(),
-                entity.getStatus(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getFailureReason()
-        );
-    }
-
-    /**
-     * Convert Domain Model to JPA Entity
-     */
-    private TransactionEntity toEntity(Transaction transaction) {
-        return TransactionEntity.builder()
-                .id(transaction.getId())
-                .terminalId(transaction.getTerminalId())
-                .amount(transaction.getAmount())
-                .type(transaction.getType())
-                .status(transaction.getStatus())
-                .createdAt(transaction.getCreatedAt())
-                .updatedAt(transaction.getUpdatedAt())
-                .failureReason(transaction.getFailureReason())
-                .build();
-    }
 }
-

@@ -41,6 +41,7 @@ io.github.lucasbrovetto.financialintegration.transactionservice
 │   │   └── web/
 │   └── outbound/
 │       └── persistence/
+│           └── mapper/
 └── TransactionServiceApplication.java
 ```
 
