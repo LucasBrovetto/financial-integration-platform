@@ -12,16 +12,20 @@ The platform will simulate a point-of-sale transaction flow:
 4. The processor stores the result and publishes an event.
 5. Apache Camel imports sample SWIFT files into the same processing flow.
 
-## Sprint 1 - Foundations and POS MVC
+## Sprint 1 - Foundations and POS Terminal
 
 **Goal:** run and verify a local transaction from a POS screen to PostgreSQL.
 
-- [ ] Repair the Maven test suite for Java 21 and configure coverage reporting.
-- [ ] Define local, test, and production configuration profiles.
-- [ ] Introduce database migrations with Flyway.
-- [ ] Create the `pos-terminal` Spring MVC module with a transaction form and result page.
-- [ ] Complete transaction creation, retrieval, approval, decline, and idempotency use cases.
-- [ ] Use MapStruct for persistence and HTTP boundary mappings.
+- [x] Repair the Maven test suite for Java 21 and configure coverage reporting.
+- [x] Define local, test, and production configuration profiles.
+- [x] Introduce database migrations with Flyway.
+- [x] Document transaction endpoints with OpenAPI and verify the HTTP flow with PostgreSQL Testcontainers.
+- [ ] Create the `apps/pos-terminal` React module with a transaction form and result page.
+- [x] Complete transaction creation and retrieval use cases.
+- [ ] Complete approval, decline, and idempotency use cases.
+- [x] Use MapStruct for HTTP boundary mappings.
+- [x] Introduce a MapStruct persistence mapper for domain and entity transformations.
+- [x] Run local PostgreSQL with Docker Compose.
 - [ ] Build service images and run PostgreSQL, POS, and processor with Docker Compose.
 
 **Demo:** submit a transaction from the POS UI and retrieve its persisted status.
