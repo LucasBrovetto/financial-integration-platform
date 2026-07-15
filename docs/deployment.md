@@ -16,12 +16,11 @@ flowchart LR
 
 ```bash
 cp .env.example .env
-docker compose up -d postgres
 cd services/transaction-service
 ./mvnw spring-boot:run
 ```
 
-Environment values are kept in `.env` for local development and are exposed to the application through standard environment variables. `.env` is ignored by Git; `.env.example` documents the required keys.
+Spring Boot starts the PostgreSQL Compose service for the `local` profile and uses `start-only` lifecycle management, so the database remains available after the application stops. Environment values are kept in `.env` for local development and are exposed to the application through standard environment variables. `.env` is ignored by Git; `.env.example` documents the required keys.
 
 ## Delivery Roadmap
 

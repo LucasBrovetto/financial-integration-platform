@@ -35,10 +35,10 @@ flowchart LR
 ## Local Development
 
 1. Copy `.env.example` to `.env` and adjust local-only values when needed.
-2. Start PostgreSQL with `docker compose up -d postgres`.
+2. Start Docker Desktop.
 3. Run the transaction service from `services/transaction-service` with `./mvnw spring-boot:run`.
 
-The default credentials are for local development only. Production credentials must be supplied through environment variables or a secret manager.
+The local profile starts the PostgreSQL service defined in `docker-compose.yml` automatically and leaves it running after the application stops. In IntelliJ, set the working directory of `TransactionServiceApplication` to `services/transaction-service`. The default credentials are for local development only. Production credentials must be supplied through environment variables or a secret manager.
 
 ## Configuration Profiles
 
