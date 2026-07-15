@@ -3,7 +3,7 @@ package io.github.lucasbrovetto.financialintegration.transactionservice.adapters
 import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.inbound.dto.CreateTransactionRequest;
 import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.inbound.dto.TransactionResponse;
 import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.inbound.exception.GlobalExceptionHandler;
-import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.inbound.mapper.TransactionMapper;
+import io.github.lucasbrovetto.financialintegration.transactionservice.adapters.inbound.mapper.TransactionDtoMapper;
 import io.github.lucasbrovetto.financialintegration.transactionservice.application.port.in.CreateTransactionCommand;
 import io.github.lucasbrovetto.financialintegration.transactionservice.application.port.in.CreateTransactionUseCase;
 import io.github.lucasbrovetto.financialintegration.transactionservice.application.port.in.GetTransactionUseCase;
@@ -48,7 +48,7 @@ class TransactionControllerTest {
     private GetTransactionUseCase getTransactionUseCase;
 
     @MockitoBean
-    private TransactionMapper transactionMapper;
+    private TransactionDtoMapper transactionDtoMapper;
 
     @Test
     @DisplayName("POST /transactions - success returns 201 and created payload")
@@ -76,9 +76,9 @@ class TransactionControllerTest {
                 TransactionStatus.PENDING, now, now, null
         );
 
-        when(transactionMapper.toCommand(request)).thenReturn(command);
+        when(transactionDtoMapper.toCommand(request)).thenReturn(command);
         when(createTransactionUseCase.execute(command)).thenReturn(created);
-        when(transactionMapper.toResponse(created)).thenReturn(response);
+        when(transactionDtoMapper.toResponse(created)).thenReturn(response);
 
         mockMvc.perform(post("/transactions")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -90,9 +90,9 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.type").value("SALE"))
                 .andExpect(jsonPath("$.status").value("PENDING"));
 
-        verify(transactionMapper).toCommand(request);
+        verify(transactionDtoMapper).toCommand(request);
         verify(createTransactionUseCase).execute(command);
-        verify(transactionMapper).toResponse(created);
+        verify(transactionDtoMapper).toResponse(created);
     }
 
     @Test
@@ -113,7 +113,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.details.amount").exists());
 
         verifyNoInteractions(createTransactionUseCase);
-        verifyNoInteractions(transactionMapper);
+        verifyNoInteractions(transactionDtoMapper);
     }
 
     @Test
@@ -131,7 +131,7 @@ class TransactionControllerTest {
                 request.type()
         );
 
-        when(transactionMapper.toCommand(request)).thenReturn(command);
+        when(transactionDtoMapper.toCommand(request)).thenReturn(command);
         when(createTransactionUseCase.execute(command))
                 .thenThrow(new RuntimeException("Unexpected error"));
 
@@ -142,7 +142,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.error").value("INTERNAL_SERVER_ERROR"))
                 .andExpect(jsonPath("$.message").value("An unexpected error occurred"));
 
-        verify(transactionMapper).toCommand(request);
+        verify(transactionDtoMapper).toCommand(request);
         verify(createTransactionUseCase).execute(command);
     }
 
@@ -162,7 +162,7 @@ class TransactionControllerTest {
         );
 
         when(getTransactionUseCase.execute(transactionId)).thenReturn(found);
-        when(transactionMapper.toResponse(found)).thenReturn(response);
+        when(transactionDtoMapper.toResponse(found)).thenReturn(response);
 
         mockMvc.perform(get("/transactions/{transactionId}", transactionId))
                 .andExpect(status().isOk())
@@ -173,7 +173,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.status").value("PENDING"));;
 
         verify(getTransactionUseCase).execute(transactionId);
-        verify(transactionMapper).toResponse(found);
+        verify(transactionDtoMapper).toResponse(found);
     }
 
     @Test
@@ -189,7 +189,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.message").exists());
 
         verify(getTransactionUseCase).execute(id);
-        verifyNoInteractions(transactionMapper);
+        verifyNoInteractions(transactionDtoMapper);
     }
 
     @Test
@@ -202,8 +202,7 @@ class TransactionControllerTest {
                         .value("Transaction ID must be a valid UUID"));
 
         verifyNoInteractions(getTransactionUseCase);
-        verifyNoInteractions(transactionMapper);
+        verifyNoInteractions(transactionDtoMapper);
     }
 
 }
-
