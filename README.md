@@ -38,7 +38,11 @@ flowchart LR
 2. Start Docker Desktop.
 3. Run the transaction service from `services/transaction-service` with `./mvnw spring-boot:run`.
 
-The local profile starts the PostgreSQL service defined in `docker-compose.yml` automatically and leaves it running after the application stops. In IntelliJ, set the working directory of `TransactionServiceApplication` to `services/transaction-service`. The default credentials are for local development only. Production credentials must be supplied through environment variables or a secret manager.
+The default `local` profile starts the PostgreSQL service defined in `docker-compose.yml` automatically and leaves it running after the application stops. Stop that database from the repository root with `docker compose stop`.
+
+In IntelliJ, set the working directory of `TransactionServiceApplication` to `services/transaction-service`. The root `.env` file configures Docker Compose; it is not imported into the Java process automatically. The default credentials are for local development only.
+
+Exceptionally, when PostgreSQL is already managed elsewhere, disable automatic Compose startup with `--spring.docker.compose.enabled=false` and provide `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` as environment variables.
 
 ## Configuration Profiles
 
