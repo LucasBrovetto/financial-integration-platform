@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/financial_platform}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:12345}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: ${JPA_SHOW_SQL:false}
+  flyway:
+    baseline-on-migrate: true
+  docker:
+    compose:
+      file: ${DOCKER_COMPOSE_FILE:../../docker-compose.yml}
+      lifecycle-management: start-only

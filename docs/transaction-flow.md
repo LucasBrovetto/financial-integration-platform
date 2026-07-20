@@ -1,35 +1,58 @@
-# Sale Transaction
+# Transaction Flows
+
+## Current Foundation: Create a Pending Transaction
 
 ```mermaid
 sequenceDiagram
+    participant Client as HTTP Client
+    participant API as Transaction API
+    participant Service as Create Transaction Service
+    participant Domain as Transaction Domain
+    participant DB as PostgreSQL
 
-participant POS
-
-participant Gateway
-
-participant Auth
-
-participant Config
-
-participant Acquirer
-
-participant DB
-
-POS->>Gateway: SALE 100
-
-Gateway->>Auth: Process Transaction
-
-Auth->>Config: Load Terminal
-
-Config-->>Auth: Terminal Config
-
-Auth->>Acquirer: Authorize
-
-Acquirer-->>Auth: APPROVED
-
-Auth->>DB: Save Transaction
-
-Auth-->>Gateway: APPROVED
-
-Gateway-->>POS: APPROVED
+    Client->>API: POST /transactions
+    API->>Service: CreateTransactionCommand
+    Service->>Domain: validate and create
+    Domain-->>Service: PENDING transaction
+    Service->>DB: persist transaction
+    DB-->>Service: saved transaction
+    Service-->>API: transaction
+    API-->>Client: 201 Created
 ```
+
+## Sprint 2: Acquirer Authorization
+
+```mermaid
+sequenceDiagram
+    participant POS as POS Terminal
+    participant Processor as Transaction Processor
+    participant Acquirer as Acquirer Simulator
+    participant DB as PostgreSQL
+
+    POS->>Processor: sale request
+    Processor->>Acquirer: TCP/IP - simplified ISO 8583 authorization
+    Acquirer-->>Processor: approved or declined
+    Processor->>DB: store final status
+    Processor-->>POS: transaction result
+```
+
+## Sprint 2: Acquirer Timeout
+
+```mermaid
+sequenceDiagram
+    participant POS as POS Terminal
+    participant Processor as Transaction Processor
+    participant Acquirer as Acquirer Simulator
+    participant DB as PostgreSQL
+
+    POS->>Processor: sale request
+    Processor->>Acquirer: TCP/IP - authorization request
+    Acquirer--xProcessor: timeout
+    Processor->>DB: store PENDING status
+    Processor-->>POS: processing delayed
+    Note over Processor,Acquirer: Retry policy is introduced in Sprint 2.
+```
+
+## Sprint 3: Event Publication
+
+After an outbox record is stored with the transaction, an event publisher sends lifecycle events to Kafka. This is intentionally planned work, not part of the current transaction-service foundation.
