@@ -1,0 +1,23 @@
+package io.github.lucasbrovetto.financialintegration.transactionservice.application.port.in;
+
+import io.github.lucasbrovetto.financialintegration.transactionservice.domain.exception.TransactionNotFoundException;
+import io.github.lucasbrovetto.financialintegration.transactionservice.domain.model.Transaction;
+
+import java.util.UUID;
+
+/**
+ * Input Port (Use Case): Get Transaction by ID
+ * Defines the contract for retrieving a transaction by its identifier.
+ */
+public interface GetTransactionUseCase {
+
+    /**
+     * Execute the get transaction use case
+     *
+     * @param transactionId The transaction identifier
+     * @return The transaction if found
+     * @throws TransactionNotFoundException if the transaction is not found
+     */
+    Transaction execute(UUID transactionId);
+}
+

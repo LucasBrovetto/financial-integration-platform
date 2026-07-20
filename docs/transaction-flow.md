@@ -26,11 +26,11 @@ sequenceDiagram
 sequenceDiagram
     participant POS as POS Terminal
     participant Processor as Transaction Processor
-    participant Acquirer as Visa / Mastercard Simulator
+    participant Acquirer as Acquirer Simulator
     participant DB as PostgreSQL
 
     POS->>Processor: sale request
-    Processor->>Acquirer: simplified ISO 8583 authorization
+    Processor->>Acquirer: TCP/IP - simplified ISO 8583 authorization
     Acquirer-->>Processor: approved or declined
     Processor->>DB: store final status
     Processor-->>POS: transaction result
@@ -46,7 +46,7 @@ sequenceDiagram
     participant DB as PostgreSQL
 
     POS->>Processor: sale request
-    Processor->>Acquirer: authorization request
+    Processor->>Acquirer: TCP/IP - authorization request
     Acquirer--xProcessor: timeout
     Processor->>DB: store PENDING status
     Processor-->>POS: processing delayed

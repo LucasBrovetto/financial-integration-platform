@@ -15,7 +15,7 @@ flowchart LR
     JpaAdapter --> Database[(PostgreSQL)]
 
     Service -. "Sprint 2" .-> AuthorizationPort["Authorization Port"]
-    AuthorizationPort -. "Sprint 2" .-> Acquirer["Acquirer Adapter"]
+    AuthorizationPort -. "Sprint 2" .-> Acquirer["TCP/IP + ISO 8583\nAcquirer Adapter"]
     Service -. "Sprint 3" .-> EventPort["Event Port"]
     EventPort -. "Sprint 3" .-> Kafka["Kafka Adapter"]
 ```
@@ -23,7 +23,7 @@ flowchart LR
 ## Current Package Structure
 
 ```text
-com.financialintegration.transactionservice
+io.github.lucasbrovetto.financialintegration.transactionservice
 ├── domain/
 │   ├── exception/
 │   └── model/
@@ -41,6 +41,7 @@ com.financialintegration.transactionservice
 │   │   └── web/
 │   └── outbound/
 │       └── persistence/
+│           └── mapper/
 └── TransactionServiceApplication.java
 ```
 

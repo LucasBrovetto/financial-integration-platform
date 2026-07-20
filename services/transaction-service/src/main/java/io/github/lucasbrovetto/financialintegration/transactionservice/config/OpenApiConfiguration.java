@@ -1,0 +1,19 @@
+package io.github.lucasbrovetto.financialintegration.transactionservice.config;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenApiConfiguration {
+
+    @Bean
+    OpenAPI transactionServiceOpenApi() {
+        return new OpenAPI().info(new Info()
+                .title("Transaction Service API")
+                .version("1.0.0")
+                .description("Stable Sprint 1 contract for creating and retrieving payment transactions. "
+                        + "New transactions are returned with PENDING status."));
+    }
+}
