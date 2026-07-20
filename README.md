@@ -7,6 +7,7 @@ A portfolio project that simulates payment processing from a point-of-sale termi
 - Java 21 and Spring Boot
 - Hexagonal transaction service with domain, application ports, and adapters
 - Spring MVC REST API, PostgreSQL/JPA, Lombok, and MapStruct
+- React and TypeScript POS terminal for transaction creation and lookup
 - JUnit 5, Mockito, and Testcontainers test foundations
 - Docker Compose configuration for local PostgreSQL
 
@@ -39,6 +40,8 @@ flowchart LR
 3. Run the transaction service from `services/transaction-service` with `./mvnw spring-boot:run`.
 
 The default `local` profile starts the PostgreSQL service defined in `docker-compose.yml` automatically and leaves it running after the application stops. Stop that database from the repository root with `docker compose stop`.
+
+Run the POS terminal separately from `apps/pos-terminal` with `pnpm dev`. It is available at `http://localhost:5173` and proxies `/api` requests to the transaction service on port `8080`.
 
 In IntelliJ, set the working directory of `TransactionServiceApplication` to `services/transaction-service`. The root `.env` file configures Docker Compose; it is not imported into the Java process automatically. The default credentials are for local development only.
 
