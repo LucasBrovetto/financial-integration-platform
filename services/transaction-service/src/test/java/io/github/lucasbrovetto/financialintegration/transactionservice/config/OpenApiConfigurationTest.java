@@ -11,6 +11,8 @@ class OpenApiConfigurationTest {
         var openApi = new OpenApiConfiguration().transactionServiceOpenApi();
 
         assertEquals("Transaction Service API", openApi.getInfo().getTitle());
-        assertEquals("v1", openApi.getInfo().getVersion());
+        assertEquals("1.0.0", openApi.getInfo().getVersion());
+        assertEquals("Stable Sprint 1 contract for creating and retrieving payment transactions. "
+                + "New transactions are returned with PENDING status.", openApi.getInfo().getDescription());
     }
 }

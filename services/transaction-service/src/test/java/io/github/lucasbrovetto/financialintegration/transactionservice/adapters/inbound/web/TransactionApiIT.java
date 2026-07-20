@@ -106,6 +106,35 @@ class TransactionApiIT {
         assertEquals("INVALID_PATH_PARAMETER", objectMapper.readTree(response.body()).get("error").asString());
     }
 
+    @Test
+    void openApi_exposesTheStableTransactionContract() throws Exception {
+        var response = get("/v3/api-docs");
+
+        assertEquals(200, response.statusCode());
+        var contract = objectMapper.readTree(response.body());
+        assertEquals("1.0.0", contract.get("info").get("version").asString());
+        assertEquals("createTransaction",
+                contract.get("paths").get("/transactions").get("post").get("operationId").asString());
+        assertEquals("getTransaction",
+                contract.get("paths").get("/transactions/{transactionId}").get("get").get("operationId").asString());
+        assertTrue(contract.get("paths").get("/transactions").get("post").get("responses").has("400"));
+        assertTrue(contract.get("paths").get("/transactions").get("post").get("responses").has("500"));
+        assertTrue(contract.get("paths").get("/transactions/{transactionId}").get("get").get("responses").has("404"));
+        assertTrue(contract.get("components").get("schemas").has("CreateTransactionRequest"));
+        assertTrue(contract.get("components").get("schemas").has("TransactionResponse"));
+        assertTrue(contract.get("components").get("schemas").has("ErrorResponse"));
+
+        var schemas = contract.get("components").get("schemas");
+        var createRequest = schemas.get("CreateTransactionRequest");
+        assertTrue(createRequest.get("required").toString().contains("terminalId"));
+        assertTrue(createRequest.get("required").toString().contains("amount"));
+        assertTrue(createRequest.get("required").toString().contains("type"));
+        assertEquals("SALE", createRequest.get("properties").get("type").get("enum").get(0).asString());
+        assertEquals("#/components/schemas/ErrorResponse",
+                contract.get("paths").get("/transactions").get("post").get("responses").get("400")
+                        .get("content").get("application/json").get("schema").get("$ref").asString());
+    }
+
     private HttpResponse<String> postJson(String path, String body) throws IOException, InterruptedException {
         var request = HttpRequest.newBuilder(uri(path))
                 .header("Content-Type", "application/json")
