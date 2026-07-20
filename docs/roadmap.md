@@ -20,7 +20,9 @@ The platform will simulate a point-of-sale transaction flow:
 - [x] Define local, test, and production configuration profiles.
 - [x] Introduce database migrations with Flyway.
 - [x] Document transaction endpoints with OpenAPI and verify the HTTP flow with PostgreSQL Testcontainers.
-- [ ] Create the `apps/pos-terminal` React module with a transaction form and result page.
+- [x] Create the `apps/pos-terminal` React module with a card-terminal experience, transaction result, and lookup by UUID.
+- [x] Connect the POS terminal to the transaction API through the local Vite proxy.
+- [x] Add frontend linting, interaction tests, API client tests, and a production build.
 - [x] Complete transaction creation and retrieval use cases.
 - [ ] Complete approval, decline, and idempotency use cases.
 - [x] Use MapStruct for HTTP boundary mappings.
@@ -63,7 +65,8 @@ The platform will simulate a point-of-sale transaction flow:
 **Goal:** publish a reproducible, well-documented portfolio project.
 
 - [ ] Add Testcontainers integration tests for PostgreSQL, Kafka, and RabbitMQ.
-- [ ] Create a GitHub Actions pipeline for build, test, coverage, and image build.
+- [x] Add baseline backend verification with GitHub Actions.
+- [ ] Extend GitHub Actions with frontend verification, coverage publication, and image builds.
 - [ ] Add a declarative Jenkins pipeline.
 - [ ] Integrate SonarQube or SonarCloud quality analysis.
 - [ ] Document C4 diagrams, ADRs, API examples, ISO 8583, and SWIFT assumptions.
