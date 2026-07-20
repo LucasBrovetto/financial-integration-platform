@@ -52,6 +52,8 @@ Database changes are versioned in `services/transaction-service/src/main/resourc
 
 When the transaction service is running locally, Swagger UI is available at `http://localhost:8080/swagger-ui/index.html`. The generated OpenAPI specification is available at `http://localhost:8080/v3/api-docs`. Both endpoints are disabled in the `prod` profile.
 
+The generated OpenAPI document is the source of truth for API consumers such as `app-terminal`. Its stable Sprint 1 operations are `createTransaction` and `getTransaction`; incompatible request or response changes require a new API contract version.
+
 ## Quality Checks
 
 Run unit and web-layer tests without Docker:

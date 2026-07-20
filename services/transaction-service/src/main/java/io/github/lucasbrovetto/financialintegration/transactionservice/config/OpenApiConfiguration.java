@@ -12,7 +12,8 @@ public class OpenApiConfiguration {
     OpenAPI transactionServiceOpenApi() {
         return new OpenAPI().info(new Info()
                 .title("Transaction Service API")
-                .version("v1")
-                .description("API for creating and retrieving payment transactions."));
+                .version("1.0.0")
+                .description("Stable Sprint 1 contract for creating and retrieving payment transactions. "
+                        + "New transactions are returned with PENDING status."));
     }
 }

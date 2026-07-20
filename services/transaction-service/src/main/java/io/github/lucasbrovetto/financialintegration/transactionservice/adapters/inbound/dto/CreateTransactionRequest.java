@@ -12,16 +12,21 @@ import java.math.BigDecimal;
  * Create Transaction Request DTO
  */
 public record CreateTransactionRequest(
-        @Schema(description = "Identifier of the POS terminal", example = "POS-UR-001")
+        @Schema(description = "Identifier of the POS terminal", example = "POS-UR-001",
+                minLength = 1, requiredMode = Schema.RequiredMode.REQUIRED)
         @NotBlank(message = "Terminal ID cannot be blank")
         String terminalId,
 
-        @Schema(description = "Transaction amount", example = "150.50")
+        @Schema(description = "Positive transaction amount in the requested currency context",
+                example = "150.50", minimum = "0", exclusiveMinimum = true,
+                requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull(message = "Amount cannot be null")
         @Positive(message = "Amount must be positive")
         BigDecimal amount,
 
-        @Schema(description = "Financial operation type", example = "SALE")
+        @Schema(description = "Financial operation type", example = "SALE",
+                allowableValues = {"SALE", "REFUND", "REVERSAL"},
+                requiredMode = Schema.RequiredMode.REQUIRED)
         @NotNull(message = "Transaction type cannot be null")
         TransactionType type
 ) {
