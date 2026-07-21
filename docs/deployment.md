@@ -22,11 +22,19 @@ cd services/transaction-service
 
 Spring Boot starts the PostgreSQL Compose service for the `local` profile and uses `start-only` lifecycle management, so the database remains available after the application stops. The root `.env` file configures Docker Compose and is ignored by Git; `.env.example` documents the available local values.
 
-Stop the managed database from the repository root when it is no longer needed:
+The local Spring profile uses `docker-compose.dev.yml` so an application started from IntelliJ manages only PostgreSQL. Stop that managed database from the repository root when it is no longer needed:
 
 ```bash
-docker compose stop
+docker compose -f docker-compose.dev.yml stop
 ```
+
+Run the complete local platform as containers from the repository root:
+
+```bash
+docker compose up --build
+```
+
+Compose waits for PostgreSQL and the transaction service health checks before starting dependent services. The POS terminal is served by Nginx at `http://localhost:5173` and forwards `/api` requests to the transaction service over the internal Compose network. Stop all containers with `docker compose down`.
 
 The automatic Compose startup is the standard development workflow. Exceptionally, if PostgreSQL is already managed elsewhere, start the application with `--spring.docker.compose.enabled=false` and provide `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` as environment variables. Flyway still applies pending migrations and Hibernate validates the schema. The root `.env` file is not loaded into the Java process automatically.
 
