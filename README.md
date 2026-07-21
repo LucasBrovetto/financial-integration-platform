@@ -22,7 +22,7 @@ flowchart LR
     Processor --> Database[(PostgreSQL)]
     Processor -. Sprint 2 .-> Acquirer[Acquirer simulator\nTCP/IP + ISO 8583]
     Processor -. Sprint 3 .-> Kafka[Kafka events]
-    Swift[SWIFT MT103 files] -. Sprint 3 .-> Camel[Apache Camel] -.-> Processor
+    Swift[SWIFT MT103 files] -. Sprint 4 .-> Camel[Apache Camel] -.-> Processor
 ```
 
 More detail is available in the [architecture documentation](docs/architecture.md) and [delivery roadmap](docs/roadmap.md).

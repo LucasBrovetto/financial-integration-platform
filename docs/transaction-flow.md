@@ -1,6 +1,6 @@
 # Transaction Flows
 
-## Current Foundation: Create a Pending Transaction
+## Current Release: Create a Pending Transaction
 
 ```mermaid
 sequenceDiagram
@@ -55,4 +55,4 @@ sequenceDiagram
 
 ## Sprint 3: Event Publication
 
-After an outbox record is stored with the transaction, an event publisher sends lifecycle events to Kafka. This is intentionally planned work, not part of the current transaction-service foundation.
+After an outbox record is stored with the transaction, an event publisher sends lifecycle events to Kafka. This is planned work and is not part of `v0.1.0`.

@@ -15,19 +15,19 @@ flowchart LR
     Processor --> Database[(PostgreSQL)]
 
     Processor -. "Sprint 3" .-> Events["Kafka Events"]
-    Swift["SWIFT MT103 File\nSprint 3"] -.-> Camel["Apache Camel"] -.-> Processor
+    Swift["SWIFT MT103 File\nSprint 4"] -.-> Camel["Apache Camel"] -.-> Processor
 ```
 
 ## Component Responsibilities
 
 | Component | Responsibility | Delivery |
 |---|---|---|
-| POS Terminal | Spring MVC UI that submits a sale and shows its result | Sprint 1 |
-| Transaction Processor | Domain rules, use cases, persistence ports, and HTTP API | Current foundation / Sprint 1 |
-| PostgreSQL | Stores transactions and processing status | Current foundation |
+| POS Terminal | React and TypeScript UI that submits a sale and shows its result | Sprint 1 |
+| Transaction Processor | Spring Boot API, domain rules, use cases, and persistence ports | Sprint 1 |
+| PostgreSQL | Stores transactions and processing status | Sprint 1 |
 | Acquirer Simulator | Deterministic authorization responses over TCP/IP using simplified ISO 8583 messages | Sprint 2 |
 | Kafka | Publishes transaction lifecycle events through an outbox flow | Sprint 3 |
-| Apache Camel | Imports sample SWIFT MT103 files into application commands | Sprint 3 |
+| Apache Camel | Imports sample SWIFT MT103 files into application commands | Sprint 4 |
 | RabbitMQ | Schedules delayed retries for unavailable acquirers | Sprint 3 |
 
 ## Design Principles
@@ -42,7 +42,7 @@ flowchart LR
 
 ## Technology Evidence
 
-- **Current foundation:** Java 21, Spring Boot, Spring MVC REST, PostgreSQL/JPA, Maven, Lombok, MapStruct, JUnit 5, Mockito, Testcontainers, and Docker Compose.
-- **Sprint 2:** acquirer adapters, simplified ISO 8583 messages, retry, and circuit breaker behavior.
-- **Sprint 3:** Kafka, RabbitMQ, Apache Camel, SWIFT import, and Java concurrency.
-- **Sprint 4:** GitHub Actions, Jenkins, SonarQube, broader integration tests, and delivery documentation.
+- **Sprint 1:** Java 21, Spring Boot, Spring MVC REST, React, TypeScript, PostgreSQL/JPA, Maven, pnpm, Nginx, MapStruct, JUnit 5, Mockito, Testcontainers, GitHub Actions, and Docker Compose.
+- **Sprint 2:** Java TCP/IP acquirer, simplified ISO 8583 messages, idempotency, and explicit timeout outcomes.
+- **Sprint 3:** PostgreSQL outbox, Kafka events, RabbitMQ recovery jobs, and asynchronous observability.
+- **Sprint 4:** Apache Camel, simplified SWIFT MT103 import, validation, and file-processing metrics.

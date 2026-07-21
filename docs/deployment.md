@@ -2,7 +2,7 @@
 
 ## Local Development Scope
 
-The initial local environment is intentionally small. PostgreSQL is the only runtime dependency required to run the transaction-service foundation. This keeps Sprint 1 reproducible and lets each additional integration prove its value.
+The IDE development environment starts only PostgreSQL as an external dependency. This keeps local work fast while the full Docker Compose setup remains available for end-to-end testing.
 
 ```mermaid
 flowchart LR
@@ -42,10 +42,10 @@ The automatic Compose startup is the standard development workflow. Exceptionall
 
 | Sprint | Runtime addition | Reason |
 |---|---|---|
-| Sprint 1 | POS Terminal and service containers | Demonstrate the core payment flow locally. |
-| Sprint 2 | Acquirer simulator over TCP/IP | Demonstrate authorization integration and ISO 8583 mapping. |
-| Sprint 3 | Kafka, RabbitMQ, and Camel import worker | Demonstrate asynchronous events, retries, and SWIFT import. |
-| Sprint 4 | CI pipelines and SonarQube | Demonstrate repeatable quality and delivery controls. |
+| Sprint 1 | POS terminal and transaction-service containers | Demonstrate transaction creation, persistence, and retrieval. |
+| Sprint 2 | Java acquirer simulator over TCP/IP | Demonstrate approved, declined, and timeout authorization outcomes. |
+| Sprint 3 | Kafka and RabbitMQ | Demonstrate reliable events and controlled recovery jobs. |
+| Sprint 4 | Apache Camel file importer | Demonstrate validated and traceable SWIFT MT103 ingestion. |
 
 ## Production Direction
 
