@@ -35,11 +35,21 @@ flowchart LR
 
 ## Local Development
 
+Run the complete platform from the repository root:
+
+```bash
+docker compose up --build
+```
+
+The POS terminal is available at `http://localhost:5173`, the transaction API at `http://localhost:8080`, and Swagger UI at `http://localhost:8080/swagger-ui/index.html`. Stop the platform with `docker compose down`; add `--volumes` only when the local PostgreSQL data should also be deleted.
+
+For a faster development loop with application processes outside containers:
+
 1. Copy `.env.example` to `.env` and adjust local-only values when needed.
 2. Start Docker Desktop.
 3. Run the transaction service from `services/transaction-service` with `./mvnw spring-boot:run`.
 
-The default `local` profile starts the PostgreSQL service defined in `docker-compose.yml` automatically and leaves it running after the application stops. Stop that database from the repository root with `docker compose stop`.
+The default `local` profile starts the PostgreSQL service defined in `docker-compose.dependencies.yml` automatically and leaves it running after the application stops. Stop that database from the repository root with `docker compose -f docker-compose.dependencies.yml stop`.
 
 Run the POS terminal separately from `apps/pos-terminal` with `pnpm dev`. It is available at `http://localhost:5173` and proxies `/api` requests to the transaction service on port `8080`.
 

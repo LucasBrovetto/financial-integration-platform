@@ -28,7 +28,7 @@ The platform will simulate a point-of-sale transaction flow:
 - [x] Use MapStruct for HTTP boundary mappings.
 - [x] Introduce a MapStruct persistence mapper for domain and entity transformations.
 - [x] Run local PostgreSQL with Docker Compose.
-- [ ] Build service images and run PostgreSQL, POS, and processor with Docker Compose.
+- [x] Build service images and run PostgreSQL, POS, and processor with Docker Compose.
 
 **Demo:** submit a transaction from the POS UI and retrieve its persisted status.
 
