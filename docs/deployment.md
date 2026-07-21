@@ -22,10 +22,10 @@ cd services/transaction-service
 
 Spring Boot starts the PostgreSQL Compose service for the `local` profile and uses `start-only` lifecycle management, so the database remains available after the application stops. The root `.env` file configures Docker Compose and is ignored by Git; `.env.example` documents the available local values.
 
-The local Spring profile uses `docker-compose.dependencies.yml` so an application started from IntelliJ manages only PostgreSQL. Stop that managed database from the repository root when it is no longer needed:
+The local Spring profile uses `docker-compose.dev.yml` so an application started from IntelliJ manages only PostgreSQL. Stop that managed database from the repository root when it is no longer needed:
 
 ```bash
-docker compose -f docker-compose.dependencies.yml stop
+docker compose -f docker-compose.dev.yml stop
 ```
 
 Run the complete local platform as containers from the repository root:
