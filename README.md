@@ -46,7 +46,7 @@ This is the architecture implemented in `v0.1.0`. The acquirer simulator, messag
 
 | Release | Deliverable | Status |
 |---|---|---|
-| `v0.1.0` | Payment terminal, REST API, persistence, tests, and Docker Compose | In preparation |
+| `v0.1.0` | Payment terminal, REST API, persistence, tests, and Docker Compose | Released |
 | `v0.2.0` | TCP/IP acquirer authorization | Planned |
 | `v0.3.0` | Reliable events and controlled recovery | Planned |
 | `v0.4.0` | SWIFT MT103 file import | Planned |
