@@ -14,6 +14,12 @@ A portfolio project that simulates payment processing from a point-of-sale termi
 - Backend and frontend verification with GitHub Actions
 - Full local platform with Docker Compose
 
+## Application Preview
+
+![Financial Integration Platform POS terminal](docs/assets/pos-terminal.png)
+
+The current release creates and retrieves pending transaction records. The operation selector previews the product direction, while authorization, refund, and reversal business flows are delivered in later increments described in the roadmap.
+
 ## Current Architecture
 
 ```mermaid
