@@ -24,10 +24,10 @@ body:
     attributes:
       label: Sprint
       options:
-        - Sprint 1 - Foundations and POS MVC
-        - Sprint 2 - Acquirer integration
-        - Sprint 3 - Event-driven integrations
-        - Sprint 4 - Quality and delivery
+        - Sprint 1 - Payment Terminal MVP
+        - Sprint 2 - TCP/IP Acquirer Authorization
+        - Sprint 3 - Reliable Events and Retries
+        - Sprint 4 - SWIFT File Import
     validations:
       required: true
   - type: dropdown

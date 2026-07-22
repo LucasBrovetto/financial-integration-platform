@@ -2,4 +2,4 @@ blank_issues_enabled: false
 contact_links:
   - name: Project roadmap
     url: ../../docs/roadmap.md
-    about: Review the four-week delivery plan before opening a new issue.
+    about: Review the delivery roadmap before opening a new issue.
