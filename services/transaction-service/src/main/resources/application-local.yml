@@ -11,5 +11,5 @@ spring:
     baseline-on-migrate: true
   docker:
     compose:
-      file: ${DOCKER_COMPOSE_FILE:../../docker-compose.yml}
+      file: ${DOCKER_COMPOSE_FILE:../../docker-compose.dev.yml}
       lifecycle-management: start-only

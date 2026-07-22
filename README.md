@@ -1,78 +1,177 @@
 # Financial Integration Platform
 
-A portfolio project that simulates payment processing from a point-of-sale terminal to an acquirer. It is built to demonstrate modern Java, Spring Boot, financial integrations, software quality, and delivery practices.
+[![Backend CI](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/backend-ci.yml/badge.svg?branch=main)](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/backend-ci.yml?query=branch%3Amain)
+[![Frontend CI](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/frontend-ci.yml/badge.svg?branch=main)](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/frontend-ci.yml?query=branch%3Amain)
+![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-React-3178C6?logo=typescript&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Current Implementation
+A portfolio project that incrementally builds a payment flow from a point-of-sale terminal to an acquirer simulator. The current release demonstrates a working Java and Spring Boot service, React terminal, PostgreSQL persistence, automated testing, and reproducible local delivery.
 
-- Java 21 and Spring Boot
-- Hexagonal transaction service with domain, application ports, and adapters
-- Spring MVC REST API, PostgreSQL/JPA, Lombok, and MapStruct
-- JUnit 5, Mockito, and Testcontainers test foundations
-- Docker Compose configuration for local PostgreSQL
+## What Works Today
 
-## Planned Platform
+- React and TypeScript payment terminal
+- Transaction creation and lookup by UUID
+- Java 21 and Spring Boot transaction service
+- Hexagonal architecture with ports and adapters
+- PostgreSQL persistence and Flyway migrations
+- OpenAPI documentation and Swagger UI
+- Unit, web, persistence, and integration tests
+- Backend and frontend verification with GitHub Actions
+- Full local platform with Docker Compose
 
-The platform will evolve through four weekly sprints:
+## Current Release Scope
 
-1. POS terminal MVC and transaction processing foundations
-2. Acquirer simulator using TCP/IP and simplified ISO 8583 messages
-3. Kafka, RabbitMQ, Apache Camel, and SWIFT MT103 import flows
-4. CI/CD, Sonar quality gates, integration testing, and portfolio documentation
+`v0.1.0` is a local payment-processing simulation, not a production payment system. It accepts transaction data, applies basic validation, stores each transaction with `PENDING` status, and retrieves it by UUID through the POS terminal or REST API.
 
-The detailed backlog and demo outcomes are available in the [delivery roadmap](docs/roadmap.md).
+The release does not connect to a real acquirer, authorize cards, move funds, or store cardholder data. Although the domain and POS expose `SALE`, `REFUND`, and `REVERSAL` identifiers, operation-specific authorization, refund, and reversal rules are planned for later increments.
 
-## Architecture Direction
+## Application Preview
+
+![Financial Integration Platform POS terminal](docs/assets/pos-terminal.png)
+
+The current release creates and retrieves pending transaction records. The operation selector previews the product direction, while authorization, refund, and reversal business flows are delivered in later increments described in the roadmap.
+
+## Current Architecture
 
 ```mermaid
 flowchart LR
-    POS[POS Terminal MVC - Sprint 1] --> Processor[Transaction Processor]
-    Processor --> Acquirer[Acquirer Simulator - Sprint 2\nTCP/IP + ISO 8583]
+    POS[React POS terminal] --> Processor[Transaction service]
     Processor --> Database[(PostgreSQL)]
-    Processor -. Sprint 3 .-> Kafka[Kafka Events]
-    Swift[SWIFT MT103 files - Sprint 3] -.-> Camel[Apache Camel] -.-> Processor
+```
+
+This is the architecture implemented in `v0.1.0`. The acquirer simulator, messaging infrastructure, and file integrations described in the [delivery roadmap](docs/roadmap.md) are planned work and are shown separately in the [architecture documentation](docs/architecture.md).
+
+## Roadmap Status
+
+| Release | Deliverable | Status |
+|---|---|---|
+| `v0.1.0` | Payment terminal, REST API, persistence, tests, and Docker Compose | In preparation |
+| `v0.2.0` | TCP/IP acquirer authorization | Planned |
+| `v0.3.0` | Reliable events and controlled recovery | Planned |
+| `v0.4.0` | SWIFT MT103 file import | Planned |
+
+See the [delivery roadmap](docs/roadmap.md) for sprint goals, demonstrations, and operation scope.
+
+## Quick Start
+
+This is the simplest way to review the complete application.
+
+### Requirements
+
+- Git
+- Docker Desktop
+- Ports `5173`, `8080`, and `5432` available
+
+### Run the platform
+
+```bash
+git clone https://github.com/LucasBrovetto/financial-integration-platform.git
+cd financial-integration-platform
+docker compose up --build
+```
+
+Wait until the three services report a healthy status, then open:
+
+- POS terminal: `http://localhost:5173`
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- API health: `http://localhost:8080/actuator/health`
+
+Stop the platform without deleting local transactions:
+
+```bash
+docker compose down
+```
+
+Delete the containers and PostgreSQL data when a clean database is required:
+
+```bash
+docker compose down --volumes
 ```
 
 ## Local Development
 
-1. Copy `.env.example` to `.env` and adjust local-only values when needed.
-2. Start Docker Desktop.
-3. Run the transaction service from `services/transaction-service` with `./mvnw spring-boot:run`.
+Use this workflow when running the backend from IntelliJ and the frontend from a terminal or VS Code.
 
-The default `local` profile starts the PostgreSQL service defined in `docker-compose.yml` automatically and leaves it running after the application stops. Stop that database from the repository root with `docker compose stop`.
+### Requirements
 
-In IntelliJ, set the working directory of `TransactionServiceApplication` to `services/transaction-service`. The root `.env` file configures Docker Compose; it is not imported into the Java process automatically. The default credentials are for local development only.
+- Java 21
+- Node.js 24
+- pnpm 11.9.0
+- Docker Desktop
 
-Exceptionally, when PostgreSQL is already managed elsewhere, disable automatic Compose startup with `--spring.docker.compose.enabled=false` and provide `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` as environment variables.
+Copy the optional local configuration file from the repository root:
 
-## Configuration Profiles
+```bash
+cp .env.example .env
+```
 
-- `local` is the default profile and connects to the PostgreSQL instance started by Docker Compose.
-- `test` is used by Testcontainers and validates the schema created by Flyway migrations.
-- `prod` requires database credentials through `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD` and validates, rather than changes, the schema.
+Start the backend:
 
-Database changes are versioned in `services/transaction-service/src/main/resources/db/migration` and applied by Flyway.
+```bash
+cd services/transaction-service
+./mvnw spring-boot:run
+```
 
-## API Documentation
+The default `local` profile uses `docker-compose.dev.yml` to start PostgreSQL automatically. It does not start another backend or frontend container.
 
-When the transaction service is running locally, Swagger UI is available at `http://localhost:8080/swagger-ui/index.html`. The generated OpenAPI specification is available at `http://localhost:8080/v3/api-docs`. Both endpoints are disabled in the `prod` profile.
+In a second terminal, install the frontend dependencies and start Vite:
 
-The generated OpenAPI document is the source of truth for API consumers such as `app-terminal`. Its stable Sprint 1 operations are `createTransaction` and `getTransaction`; incompatible request or response changes require a new API contract version.
+```bash
+cd apps/pos-terminal
+pnpm install
+pnpm dev
+```
+
+Do not run this development workflow and the full Docker Compose stack at the same time because they use the same ports.
+
+When the backend is stopped, its managed PostgreSQL container remains available. Stop it from the repository root with:
+
+```bash
+docker compose -f docker-compose.dev.yml stop
+```
 
 ## Quality Checks
 
-Run unit and web-layer tests without Docker:
+Run backend unit and web tests:
 
 ```bash
 cd services/transaction-service
 ./mvnw test
 ```
 
-Run PostgreSQL integration tests when Docker is available:
+Run backend integration tests against PostgreSQL Testcontainers:
 
 ```bash
 ./mvnw verify -Pintegration
 ```
 
-The integration profile verifies persistence adapters and the HTTP transaction flow against PostgreSQL Testcontainers using JSON fixtures.
+Run all frontend checks:
 
-The JaCoCo HTML report is generated at `services/transaction-service/target/site/jacoco/index.html` after `verify`.
+```bash
+cd apps/pos-terminal
+pnpm lint
+pnpm test:run
+pnpm build
+```
+
+## Configuration
+
+- `local` is the default Spring profile and uses the PostgreSQL container started from `docker-compose.dev.yml`.
+- `test` is used by Testcontainers and validates Flyway migrations against PostgreSQL.
+- `prod` requires `DB_URL`, `DB_USERNAME`, and `DB_PASSWORD`. It validates the schema and disables Swagger endpoints.
+
+Database changes are versioned in `services/transaction-service/src/main/resources/db/migration`.
+
+## API Documentation
+
+With the backend running locally:
+
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- OpenAPI document: `http://localhost:8080/v3/api-docs`
+
+The OpenAPI document is the source of truth for consumers such as `pos-terminal`. The stable Sprint 1 operations are `createTransaction` and `getTransaction`.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

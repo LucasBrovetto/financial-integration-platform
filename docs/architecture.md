@@ -6,29 +6,41 @@ The platform simulates one clear financial journey: a POS terminal submits a pay
 
 The repository is delivered incrementally. Components shown as planned are not presented as current implementation.
 
-## Target MVP
+## Current Architecture (`v0.1.0`)
 
 ```mermaid
 flowchart LR
-    POS["POS Terminal\nSprint 1"] --> Processor["Transaction Processor\nHexagonal Architecture"]
+    POS["React POS Terminal"] --> Processor["Spring Boot Transaction Service"]
+    Processor --> Database[(PostgreSQL)]
+```
+
+The current release provides a REST-based payment terminal, transaction validation, PostgreSQL persistence, transaction lookup, automated tests, health checks, and a reproducible Docker Compose environment.
+
+## Planned Evolution
+
+```mermaid
+flowchart LR
+    POS["POS Terminal"] --> Processor["Transaction Processor\nHexagonal Architecture"]
     Processor --> Acquirer["Acquirer Simulator\nTCP/IP + ISO 8583\nSprint 2"]
     Processor --> Database[(PostgreSQL)]
 
     Processor -. "Sprint 3" .-> Events["Kafka Events"]
-    Swift["SWIFT MT103 File\nSprint 3"] -.-> Camel["Apache Camel"] -.-> Processor
+    Swift["SWIFT MT103 File\nSprint 4"] -.-> Camel["Apache Camel"] -.-> Processor
 ```
+
+This diagram is a roadmap, not a representation of the current runtime. Each planned component will be treated as implemented only after its code, tests, documentation, and executable demo are delivered.
 
 ## Component Responsibilities
 
-| Component | Responsibility | Delivery |
+| Component | Responsibility | Status |
 |---|---|---|
-| POS Terminal | Spring MVC UI that submits a sale and shows its result | Sprint 1 |
-| Transaction Processor | Domain rules, use cases, persistence ports, and HTTP API | Current foundation / Sprint 1 |
-| PostgreSQL | Stores transactions and processing status | Current foundation |
-| Acquirer Simulator | Deterministic authorization responses over TCP/IP using simplified ISO 8583 messages | Sprint 2 |
-| Kafka | Publishes transaction lifecycle events through an outbox flow | Sprint 3 |
-| Apache Camel | Imports sample SWIFT MT103 files into application commands | Sprint 3 |
-| RabbitMQ | Schedules delayed retries for unavailable acquirers | Sprint 3 |
+| POS Terminal | React and TypeScript UI that submits a transaction and shows its result | Implemented in Sprint 1 |
+| Transaction Processor | Spring Boot API, domain rules, use cases, and persistence ports | Implemented in Sprint 1 |
+| PostgreSQL | Stores transactions and processing status | Implemented in Sprint 1 |
+| Acquirer Simulator | Deterministic authorization responses over TCP/IP using simplified ISO 8583 messages | Planned for Sprint 2 |
+| Kafka | Publishes transaction lifecycle events through an outbox flow | Planned for Sprint 3 |
+| RabbitMQ | Schedules controlled recovery work for unavailable acquirers | Planned for Sprint 3 |
+| Apache Camel | Imports sample SWIFT MT103 files into application commands | Planned for Sprint 4 |
 
 ## Design Principles
 
@@ -42,7 +54,7 @@ flowchart LR
 
 ## Technology Evidence
 
-- **Current foundation:** Java 21, Spring Boot, Spring MVC REST, PostgreSQL/JPA, Maven, Lombok, MapStruct, JUnit 5, Mockito, Testcontainers, and Docker Compose.
-- **Sprint 2:** acquirer adapters, simplified ISO 8583 messages, retry, and circuit breaker behavior.
-- **Sprint 3:** Kafka, RabbitMQ, Apache Camel, SWIFT import, and Java concurrency.
-- **Sprint 4:** GitHub Actions, Jenkins, SonarQube, broader integration tests, and delivery documentation.
+- **Sprint 1:** Java 21, Spring Boot, Spring MVC REST, React, TypeScript, PostgreSQL/JPA, Maven, pnpm, Nginx, MapStruct, JUnit 5, Mockito, Testcontainers, GitHub Actions, and Docker Compose.
+- **Sprint 2:** Java TCP/IP acquirer, simplified ISO 8583 messages, idempotency, and explicit timeout outcomes.
+- **Sprint 3:** PostgreSQL outbox, Kafka events, RabbitMQ recovery jobs, and asynchronous observability.
+- **Sprint 4:** Apache Camel, simplified SWIFT MT103 import, validation, and file-processing metrics.

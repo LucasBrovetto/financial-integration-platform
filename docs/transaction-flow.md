@@ -1,6 +1,6 @@
 # Transaction Flows
 
-## Current Foundation: Create a Pending Transaction
+## Current Release: Create a Pending Transaction
 
 ```mermaid
 sequenceDiagram
@@ -20,7 +20,7 @@ sequenceDiagram
     API-->>Client: 201 Created
 ```
 
-## Sprint 2: Acquirer Authorization
+## Planned for Sprint 2: Acquirer Authorization
 
 ```mermaid
 sequenceDiagram
@@ -36,7 +36,7 @@ sequenceDiagram
     Processor-->>POS: transaction result
 ```
 
-## Sprint 2: Acquirer Timeout
+## Planned for Sprint 2: Acquirer Timeout
 
 ```mermaid
 sequenceDiagram
@@ -50,9 +50,9 @@ sequenceDiagram
     Acquirer--xProcessor: timeout
     Processor->>DB: store PENDING status
     Processor-->>POS: processing delayed
-    Note over Processor,Acquirer: Retry policy is introduced in Sprint 2.
+    Note over Processor,Acquirer: No automatic financial retry is performed in Sprint 2.
 ```
 
-## Sprint 3: Event Publication
+## Planned for Sprint 3: Event Publication
 
-After an outbox record is stored with the transaction, an event publisher sends lifecycle events to Kafka. This is intentionally planned work, not part of the current transaction-service foundation.
+After an outbox record is stored with the transaction, an event publisher sends lifecycle events to Kafka. This is planned work and is not part of `v0.1.0`.
