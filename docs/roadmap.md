@@ -13,7 +13,7 @@ Quality is part of every sprint. Testing, CI, documentation, and reproducible lo
 | `v0.3.0` | Reliable transaction events and delayed retries | Planned |
 | `v0.4.0` | SWIFT MT103 file import with Apache Camel | Planned |
 
-## Product Journey
+## Planned Product Journey
 
 1. A React POS terminal sends a sale to the Spring Boot transaction API.
 2. The transaction service validates and persists the request.

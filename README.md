@@ -1,6 +1,12 @@
 # Financial Integration Platform
 
-A portfolio project that simulates payment processing from a point-of-sale terminal to an acquirer. It demonstrates Java and Spring Boot development, financial integrations, automated testing, and delivery practices through a working application.
+[![Backend CI](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/backend-ci.yml/badge.svg?branch=main)](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/backend-ci.yml?query=branch%3Amain)
+[![Frontend CI](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/frontend-ci.yml/badge.svg?branch=main)](https://github.com/LucasBrovetto/financial-integration-platform/actions/workflows/frontend-ci.yml?query=branch%3Amain)
+![Java 21](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-React-3178C6?logo=typescript&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+A portfolio project that incrementally builds a payment flow from a point-of-sale terminal to an acquirer simulator. The current release demonstrates a working Java and Spring Boot service, React terminal, PostgreSQL persistence, automated testing, and reproducible local delivery.
 
 ## What Works Today
 
@@ -13,6 +19,12 @@ A portfolio project that simulates payment processing from a point-of-sale termi
 - Unit, web, persistence, and integration tests
 - Backend and frontend verification with GitHub Actions
 - Full local platform with Docker Compose
+
+## Current Release Scope
+
+`v0.1.0` is a local payment-processing simulation, not a production payment system. It accepts transaction data, applies basic validation, stores each transaction with `PENDING` status, and retrieves it by UUID through the POS terminal or REST API.
+
+The release does not connect to a real acquirer, authorize cards, move funds, or store cardholder data. Although the domain and POS expose `SALE`, `REFUND`, and `REVERSAL` identifiers, operation-specific authorization, refund, and reversal rules are planned for later increments.
 
 ## Application Preview
 
@@ -29,6 +41,17 @@ flowchart LR
 ```
 
 This is the architecture implemented in `v0.1.0`. The acquirer simulator, messaging infrastructure, and file integrations described in the [delivery roadmap](docs/roadmap.md) are planned work and are shown separately in the [architecture documentation](docs/architecture.md).
+
+## Roadmap Status
+
+| Release | Deliverable | Status |
+|---|---|---|
+| `v0.1.0` | Payment terminal, REST API, persistence, tests, and Docker Compose | In preparation |
+| `v0.2.0` | TCP/IP acquirer authorization | Planned |
+| `v0.3.0` | Reliable events and controlled recovery | Planned |
+| `v0.4.0` | SWIFT MT103 file import | Planned |
+
+See the [delivery roadmap](docs/roadmap.md) for sprint goals, demonstrations, and operation scope.
 
 ## Quick Start
 
