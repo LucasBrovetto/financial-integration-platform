@@ -145,3 +145,7 @@ With the backend running locally:
 - OpenAPI document: `http://localhost:8080/v3/api-docs`
 
 The OpenAPI document is the source of truth for consumers such as `pos-terminal`. The stable Sprint 1 operations are `createTransaction` and `getTransaction`.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
