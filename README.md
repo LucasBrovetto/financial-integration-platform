@@ -14,18 +14,15 @@ A portfolio project that simulates payment processing from a point-of-sale termi
 - Backend and frontend verification with GitHub Actions
 - Full local platform with Docker Compose
 
-## Architecture
+## Current Architecture
 
 ```mermaid
 flowchart LR
     POS[React POS terminal] --> Processor[Transaction service]
     Processor --> Database[(PostgreSQL)]
-    Processor -. Sprint 2 .-> Acquirer[Acquirer simulator\nTCP/IP + ISO 8583]
-    Processor -. Sprint 3 .-> Kafka[Kafka events]
-    Swift[SWIFT MT103 files] -. Sprint 4 .-> Camel[Apache Camel] -.-> Processor
 ```
 
-More detail is available in the [architecture documentation](docs/architecture.md) and [delivery roadmap](docs/roadmap.md).
+This is the architecture implemented in `v0.1.0`. The acquirer simulator, messaging infrastructure, and file integrations described in the [delivery roadmap](docs/roadmap.md) are planned work and are shown separately in the [architecture documentation](docs/architecture.md).
 
 ## Quick Start
 

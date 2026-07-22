@@ -13,12 +13,21 @@ flowchart LR
     Service --> PersistencePort["Transaction Persistence Port"]
     PersistencePort --> JpaAdapter["JPA Adapter"]
     JpaAdapter --> Database[(PostgreSQL)]
+```
 
-    Service -. "Sprint 2" .-> AuthorizationPort["Authorization Port"]
+The diagram above represents the ports and adapters implemented in `v0.1.0`.
+
+## Planned Adapters
+
+```mermaid
+flowchart LR
+    Service["Application Service"] -. "Sprint 2" .-> AuthorizationPort["Authorization Port"]
     AuthorizationPort -. "Sprint 2" .-> Acquirer["TCP/IP + ISO 8583\nAcquirer Adapter"]
     Service -. "Sprint 3" .-> EventPort["Event Port"]
     EventPort -. "Sprint 3" .-> Kafka["Kafka Adapter"]
 ```
+
+These ports and adapters illustrate the intended direction. They do not exist in the current codebase and may be refined when their business rules are implemented.
 
 ## Current Package Structure
 
