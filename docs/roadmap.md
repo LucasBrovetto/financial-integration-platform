@@ -8,7 +8,7 @@ Quality is part of every sprint. Testing, CI, documentation, and reproducible lo
 
 | Version | Deliverable | Status |
 |---|---|---|
-| `v0.1.0` | Working payment terminal with persistence and Docker Compose | In preparation |
+| `v0.1.0` | Working payment terminal with persistence and Docker Compose | Released |
 | `v0.2.0` | Sale authorization through a Java acquirer over TCP/IP | Planned |
 | `v0.3.0` | Reliable transaction events and delayed retries | Planned |
 | `v0.4.0` | SWIFT MT103 file import with Apache Camel | Planned |
