@@ -47,7 +47,7 @@ This is the architecture implemented in `v0.1.0`. The acquirer simulator, messag
 | Release | Deliverable | Status |
 |---|---|---|
 | `v0.1.0` | Payment terminal, REST API, persistence, tests, and Docker Compose | Released |
-| `v0.2.0` | TCP/IP acquirer authorization | Planned |
+| `v0.2.0` | TCP/IP acquirer authorization with ISO 8583 and jPOS | In progress |
 | `v0.3.0` | Reliable events and controlled recovery | Planned |
 | `v0.4.0` | SWIFT MT103 file import | Planned |
 
@@ -174,4 +174,6 @@ The OpenAPI document is the source of truth for consumers such as `pos-terminal`
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+The original project code is licensed under the [MIT License](LICENSE). Sprint
+2 introduces jPOS under GNU AGPLv3; see [third-party licenses](THIRD_PARTY_LICENSES.md)
+for the obligations that apply to the combined jPOS-based application.

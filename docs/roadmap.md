@@ -9,7 +9,7 @@ Quality is part of every sprint. Testing, CI, documentation, and reproducible lo
 | Version | Deliverable | Status |
 |---|---|---|
 | `v0.1.0` | Working payment terminal with persistence and Docker Compose | Released |
-| `v0.2.0` | Sale authorization through a Java acquirer over TCP/IP | Planned |
+| `v0.2.0` | Sale authorization through a Java acquirer over TCP/IP | In progress |
 | `v0.3.0` | Reliable transaction events and delayed retries | Planned |
 | `v0.4.0` | SWIFT MT103 file import with Apache Camel | Planned |
 
@@ -65,17 +65,21 @@ The current `TransactionType` enum contains `SALE`, `REFUND`, and `REVERSAL`, bu
 
 ## Sprint 2 - TCP/IP Acquirer Authorization
 
-**Status:** Planned
+**Status:** In progress
 
 **Target release:** `v0.2.0`
 
 **Goal:** send a sale from the transaction service to a Java acquirer simulator over TCP/IP and return a clear authorization result to the POS.
 
+The first increment defines the simplified ISO 8583 profile and implements an
+interactive jPOS acquirer that lets an operator choose each response in the
+console.
+
 - [ ] Define an authorization port with provider-neutral request and response models.
 - [ ] Create a standalone Java acquirer simulator with a TCP server.
 - [ ] Implement a TCP client adapter in the transaction service.
 - [ ] Define simplified ISO 8583 purchase messages with amount, STAN, RRN, terminal ID, and response code.
-- [ ] Produce deterministic approved, declined, and timeout scenarios.
+- [ ] Produce operator-controlled approved, declined, error, and timeout scenarios.
 - [ ] Persist authorization metadata and the resulting transaction status.
 - [ ] Add idempotency for repeated POS requests.
 - [ ] Represent an unanswered request as an uncertain outcome without performing an unsafe automatic retry.
