@@ -6,10 +6,24 @@ on:
       - main
       - develop
       - "feature/**"
+    paths:
+      - "services/transaction-service/**"
+      - ".mvn/**"
+      - "mvnw"
+      - "mvnw.cmd"
+      - "pom.xml"
+      - ".github/workflows/backend-ci.yml"
   pull_request:
     branches:
       - main
       - develop
+    paths:
+      - "services/transaction-service/**"
+      - ".mvn/**"
+      - "mvnw"
+      - "mvnw.cmd"
+      - "pom.xml"
+      - ".github/workflows/backend-ci.yml"
   workflow_dispatch:
 
 permissions:
