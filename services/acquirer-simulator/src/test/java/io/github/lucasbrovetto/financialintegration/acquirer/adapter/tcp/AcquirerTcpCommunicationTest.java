@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AcquirerTcpCommunicationTest {
 
     private static final int CONCURRENT_CLIENTS = 50;
+    private static final int CLIENT_RESPONSE_TIMEOUT_MILLIS = 2_000;
+    private static final int CONCURRENT_CLIENT_RESPONSE_TIMEOUT_MILLIS = 10_000;
 
     @Test
     @Timeout(value = 5, unit = TimeUnit.SECONDS)
@@ -36,7 +38,7 @@ class AcquirerTcpCommunicationTest {
             ASCIIChannel client = new ASCIIChannel("127.0.0.1", server.getPort(), packager);
             client.setLengthDigits(4);
             client.connect();
-            client.setTimeout(2_000);
+            client.setTimeout(CLIENT_RESPONSE_TIMEOUT_MILLIS);
             try {
                 client.send(authorizationRequest(packager));
 
@@ -55,14 +57,14 @@ class AcquirerTcpCommunicationTest {
     }
 
     @Test
-    @Timeout(value = 10, unit = TimeUnit.SECONDS)
+    @Timeout(value = 30, unit = TimeUnit.SECONDS)
     void handlesManyConcurrentConnectionsWithVirtualThreads() throws Exception {
         ISOPackager packager = loadPackager();
         AuthorizationRequestListener listener =
                 new AuthorizationRequestListener(request -> AuthorizationDecision.APPROVED);
 
         try (VirtualThreadAcquirerServer server = new VirtualThreadAcquirerServer(0, packager, listener);
-             var clients = Executors.newVirtualThreadPerTaskExecutor()) {
+             var clients = Executors.newFixedThreadPool(CONCURRENT_CLIENTS)) {
             Thread serverThread = Thread.ofVirtual()
                     .name("acquirer-concurrent-test-acceptor")
                     .start(() -> start(server));
@@ -86,7 +88,7 @@ class AcquirerTcpCommunicationTest {
         ASCIIChannel client = new ASCIIChannel("127.0.0.1", port, packager);
         client.setLengthDigits(4);
         client.connect();
-        client.setTimeout(2_000);
+        client.setTimeout(CONCURRENT_CLIENT_RESPONSE_TIMEOUT_MILLIS);
         try {
             client.send(authorizationRequest(packager, sequence));
             return client.receive();

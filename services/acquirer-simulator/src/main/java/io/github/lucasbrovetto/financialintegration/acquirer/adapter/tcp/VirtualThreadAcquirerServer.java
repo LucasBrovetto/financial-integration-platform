@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class VirtualThreadAcquirerServer implements AutoCloseable {
 
     private static final int LENGTH_HEADER_DIGITS = 4;
+    private static final int CONNECTION_BACKLOG = 256;
 
     private final ISOPackager packager;
     private final ISORequestListener requestListener;
@@ -38,7 +39,7 @@ public final class VirtualThreadAcquirerServer implements AutoCloseable {
 
         this.packager = packager;
         this.requestListener = requestListener;
-        this.serverSocket = new ServerSocket(port);
+        this.serverSocket = new ServerSocket(port, CONNECTION_BACKLOG);
         this.port = serverSocket.getLocalPort();
     }
 
